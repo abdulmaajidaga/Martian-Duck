@@ -1,0 +1,21 @@
+{
+  "name": "jezero_area2",
+  "heightmap": "Assets/MarsData/Heightmaps/jezero_area2_height.png",
+  "color": "Assets/MarsData/Textures/jezero_area2_color.png",
+  "resolution": 1025,
+  "width_m": 2250.0,
+  "length_m": 2250.0,
+  "min_elevation_m": -2568.666,
+  "max_elevation_m": -2445.937,
+  "height_range_m": 122.729,
+  "map_window_xmin_ymin_xmax_ymax": [
+    -2480.027,
+    1092365.458,
+    -230.027,
+    1094615.458
+  ],
+  "center_lat": 18.455182,
+  "center_lon_east": 77.416324,
+  "source_dtm": "DTEEC_045994_1985_046060_1985_U01.IMG",
+  "source_ortho": "ESP_046060_1985_RED_C_01_ORTHO.JP2"
+}

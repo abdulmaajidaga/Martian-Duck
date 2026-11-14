@@ -1,0 +1,89 @@
+/* Astronaut visor HUD: thin cyan lines, translucent dark panels, white/cyan text with a soft shadow so it stays
+   readable over the orange terrain. Panels sit at the screen edges; the centre stays clear. */
+
+.hud-root { position: absolute; left: 0; top: 0; right: 0; bottom: 0; }
+
+/* ---------- regions ---------- */
+.hud-region { position: absolute; }
+.region-topcenter { top: 12px; left: 0; right: 0; align-items: center; }
+.region-topleft { top: 14px; left: 18px; }
+.region-topright { top: 14px; right: 18px; align-items: flex-end; }
+.region-bottomleft { bottom: 18px; left: 18px; }
+.region-bottomright { bottom: 18px; right: 18px; align-items: flex-end; }
+.region-leftmiddle { left: 18px; top: 38%; }
+.region-fullscreen { left: 0; top: 0; right: 0; bottom: 0; }
+.hud-fullscreen { position: absolute; left: 0; top: 0; right: 0; bottom: 0; }
+
+/* ---------- panels and text ---------- */
+.hud-panel {
+    background-color: rgba(3, 16, 24, 0.40);
+    border-width: 1px;
+    border-color: rgba(110, 235, 255, 0.55);
+    border-radius: 2px;
+    padding: 6px 10px 6px 10px;
+    margin-bottom: 8px;
+    min-width: 200px;
+}
+.hud-row { flex-direction: row; align-items: center; }
+
+.hud-title, .hud-label, .hud-value, .hud-small, .hud-placeholder, .help-key, .hud-hint,
+.compass-label, .compass-heading, .map-north-label, .map-waypoint-label {
+    margin: 0; padding: 0;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85);
+}
+.hud-title { font-size: 11px; color: rgba(130, 240, 255, 0.95); letter-spacing: 2px; -unity-font-style: bold; margin-bottom: 3px; }
+.hud-label { font-size: 12px; color: rgba(150, 235, 250, 0.90); min-width: 52px; }
+.hud-value { font-size: 18px; color: rgb(238, 252, 255); }
+.hud-small { font-size: 10px; color: rgba(150, 230, 245, 0.80); margin-top: 2px; }
+.hud-placeholder { font-size: 9px; color: rgb(255, 205, 90); letter-spacing: 1px; margin-bottom: 2px; }
+.hud-warning { color: rgb(255, 120, 90); }
+
+.hud-bar { height: 4px; background-color: rgba(110, 235, 255, 0.18); border-width: 1px; border-color: rgba(110, 235, 255, 0.45); margin: 2px 0 4px 0; }
+.hud-bar-fill { height: 100%; background-color: rgba(120, 240, 255, 0.85); }
+.hud-bar-warning { background-color: rgba(255, 120, 90, 0.9); }
+
+.hud-hint { position: absolute; bottom: 8px; left: 0; right: 0; -unity-text-align: middle-center; font-size: 10px; color: rgba(150, 230, 245, 0.55); letter-spacing: 2px; }
+
+/* ---------- compass ---------- */
+.compass-panel { align-items: center; min-width: 0; padding: 4px 0 4px 0; background-color: rgba(3, 16, 24, 0.30); }
+.compass-strip { height: 40px; overflow: hidden; }
+.compass-tick { position: absolute; top: 0; width: 1px; height: 6px; background-color: rgba(150, 240, 255, 0.55); }
+.compass-tick-major { height: 11px; background-color: rgba(190, 248, 255, 0.85); }
+.compass-tick-cardinal { height: 15px; width: 2px; background-color: rgb(240, 253, 255); }
+.compass-label { position: absolute; top: 16px; width: 40px; -unity-text-align: upper-center; font-size: 11px; color: rgba(160, 240, 255, 0.85); }
+.compass-cardinal { font-size: 16px; color: rgb(245, 254, 255); -unity-font-style: bold; top: 15px; }
+.compass-intercardinal { font-size: 12px; color: rgb(205, 248, 255); }
+.compass-caret { position: absolute; top: 0; left: 50%; width: 10px; height: 8px; margin-left: -5px; }
+.compass-heading { font-size: 15px; color: rgb(240, 253, 255); -unity-font-style: bold; letter-spacing: 1px; }
+
+/* ---------- waypoint ---------- */
+.waypoint-panel { min-width: 230px; }
+.waypoint-arrow { width: 30px; height: 34px; margin-right: 10px; }
+.waypoint-text { flex-grow: 1; }
+
+/* ---------- layer panel ---------- */
+.layer-panel { position: absolute; left: 18px; top: 34%; min-width: 250px; }
+.layer-row { margin: 2px 0 4px 0; }
+.layer-toggle { margin: 0; }
+.layer-toggle Label { color: rgb(235, 252, 255); font-size: 13px; min-width: 0; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85); }
+.layer-toggle .unity-toggle__checkmark { border-color: rgba(110, 235, 255, 0.8); background-color: rgba(3, 16, 24, 0.6); -unity-background-image-tint-color: rgb(140, 245, 255); }
+.layer-legend { margin-left: 22px; }
+
+/* ---------- help ---------- */
+.help-panel { position: absolute; top: 30%; left: 50%; width: 360px; margin-left: -180px; background-color: rgba(3, 16, 24, 0.72); padding: 10px 14px 10px 14px; }
+.help-key { font-size: 13px; color: rgb(140, 245, 255); -unity-font-style: bold; width: 90px; }
+
+/* ---------- map ---------- */
+.map-player { position: absolute; width: 22px; height: 26px; }
+.map-title { position: absolute; top: 14px; left: 50%; width: 420px; margin-left: -210px; align-items: center; }
+.map-north { position: absolute; top: 14px; right: 18px; min-width: 0; width: 54px; align-items: center; padding: 6px; }
+.map-north-arrow { width: 22px; height: 30px; }
+.map-north-label { font-size: 16px; color: rgb(245, 254, 255); -unity-font-style: bold; }
+.map-info { position: absolute; bottom: 18px; right: 18px; min-width: 300px; }
+.map-scalebar { height: 6px; border-left-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-color: rgb(240, 253, 255); margin: 2px 0 2px 0; }
+.map-waypoint { position: absolute; flex-direction: row; align-items: center; }
+.map-waypoint-dot { width: 14px; height: 14px; border-radius: 7px; border-width: 2px; border-color: rgb(255, 230, 90); background-color: rgba(255, 210, 60, 0.35); }
+.map-waypoint-label { font-size: 12px; color: rgb(255, 236, 140); margin-left: 6px; }
+.map-waypoint-next .map-waypoint-dot { background-color: rgba(255, 220, 60, 0.9); }
+.map-waypoint-done .map-waypoint-dot { border-color: rgba(200, 200, 200, 0.7); background-color: rgba(120, 120, 120, 0.4); }
+.map-waypoint-done .map-waypoint-label { color: rgba(220, 220, 220, 0.7); }

@@ -1,0 +1,54 @@
+{
+  "name": "jezero",
+  "area": "Three Forks sample depot, Jezero crater",
+  "heightmap": "Assets/MarsData/Heightmaps/jezero_height.png",
+  "color": "Assets/MarsData/Textures/jezero_color.png",
+  "resolution": 2049,
+  "color_size": [
+    8192,
+    8192
+  ],
+  "width_m": 1254.275,
+  "length_m": 1543.555,
+  "width_note": "true ground distance at the area's centre latitude (the DTM map width is 1277.193 m)",
+  "min_elevation_m": -2554.768,
+  "max_elevation_m": -2449.711,
+  "height_range_m": 105.057,
+  "elevation_datum": "metres above the Mars 2000 areoid (Smith et al. 2001)",
+  "lon_range_east": [
+    77.39670753,
+    77.41902351
+  ],
+  "lat_range_north": [
+    18.43816893,
+    18.46422
+  ],
+  "map_window_xmin_ymin_xmax_ymax": [
+    -2477.723,
+    1092482.387,
+    -1200.531,
+    1094025.942
+  ],
+  "dtm_window_xmin_ymin_xmax_ymax": [
+    -2471.659,
+    1092395.764,
+    -1194.466,
+    1093939.319
+  ],
+  "depot_lonlat": [
+    77.408292,
+    18.45287053
+  ],
+  "depot_normalized_xy": [
+    0.5191,
+    0.5643
+  ],
+  "source_dtm": "DTEEC_045994_1985_046060_1985_U01.IMG",
+  "source_color": "USGS Mars 2020 TRN HiRISE orthomosaic JEZ_hirise_soc_006 (25 cm, pre-landing images), colourised",
+  "frame_note": "Rectangle and depot are in the Mars 2020 (TRN mosaic) frame; the DTM was cropped at the matching features.",
+  "dtm_offset_m_east_north": [
+    6.06,
+    -86.62
+  ],
+  "alternative_color": "MarsSources/jezero_color_HiRISE_ESP_083512_2024.png (2024 HiRISE, registered; noisier, no visible tracks)"
+}
