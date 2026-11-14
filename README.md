@@ -1,3 +1,5 @@
+<p align="center"><img src="3_martian_ducklings.jpeg" alt="Three Martian ducklings" width="700"></p>
+
 # Martian Duck: walking on Jezero Crater
 
 First-person astronaut walking on real Mars terrain: the Three Forks sample depot area of Jezero Crater,
