@@ -9,7 +9,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9046310263622525262}
-  - component: {fileID: 7376996257188250034}
+  - component: {fileID: 4417285519302261771}
+  - component: {fileID: 6129834470129753302}
+  - component: {fileID: 2894710253981172245}
+  - component: {fileID: 8301592746011284617}
+  - component: {fileID: 5170342981127736520}
   m_Layer: 0
   m_Name: Path Planner
   m_TagString: Untagged
@@ -32,7 +36,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7376996257188250034
+--- !u!114 &4417285519302261771
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,8 +45,100 @@ MonoBehaviour:
   m_GameObject: {fileID: 7722064167183158384}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3cf2fb0516ca3154eaab744e22c5e5ba, type: 3}
+  m_Script: {fileID: 11500000, guid: 084c16f614124ea8832d11c8f160131a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StraightLinePathPlanner
-  sampleSpacing: 1
+  m_EditorClassIdentifier: Assembly-CSharp::MarsDustMap
+  dustIndexJson: {fileID: 4900000, guid: 518308074966465f86a2e32a80a76df4, type: 3}
+  scale: 0
+  dustyDci: 0.94
+  clearDci: 0.975
+--- !u!114 &6129834470129753302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7722064167183158384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dc217be58894ef6b5ac3e28edabf72d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DustAwareAStarPlanner
+  maxSearchCells: 2500000
+  minMarginM: 800
+  marginFraction: 0.35
+  heuristicWeight: 1.05
+  expansionsPerFrame: 150000
+  slopeWeight: 1.5
+  dustWeight: 0.6
+  dustMap: {fileID: 4417285519302261771}
+  snapRadiusM: 200
+  skipUnreachableStops: 1
+  exactOrderUpTo: 15
+  smoothPath: 1
+  outputSpacingM: 5
+  defaultWalkSpeed: 4
+  defaultMaxSlopeDeg: 30
+  sampleCategories:
+  - Depot tube
+  - Sample site
+  sampleRouteReturnsToStart: 0
   drawLastPlan: 1
+  logPlans: 1
+--- !u!114 &2894710253981172245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7722064167183158384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 334d09cfe2c34536a2bf1492184646f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MapClickRoutePlanner
+  followPlannedRoute: 1
+  reorderStops: 1
+  arriveRadius: 8
+  clickMaxMovePixels: 6
+  logPlans: 1
+--- !u!114 &8301592746011284617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7722064167183158384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5832342b7d12469290a8e3da35b8a8e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlannedPathRenderer
+  lineMaterial: {fileID: 2100000, guid: 8475b64fb92b49ef8f4101a885addfb0, type: 2}
+  color: {r: 1, g: 0.55, b: 0.1, a: 1}
+  groundWidth: 0.6
+  groundLift: 0.4
+  mapWidthPixels: 4
+  mapLift: 60
+  maxLinePoints: 8000
+  drawEveryPlan: 0
+--- !u!114 &5170342981127736520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7722064167183158384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7b02bcd751045f1a0b6b7b269d36261, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MissionPathGuide
+  guideMission: 1
+  planTubeCollectionOrder: 1
+  tubePrefix: Depot tube
+  checkInterval: 0.5
+  targetMovedM: 15
+  offRouteM: 40
+  minReplanSeconds: 4
+  logPlans: 1
