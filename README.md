@@ -35,8 +35,7 @@ and depot tubes (with real rover photos), and use a helmet HUD with a top-down m
 | Space | Jump (Mars gravity, 3.71 m/s²) |
 | M | Map mode (top-down, movement paused, mouse free) |
 | L | Data layers panel (1–9 toggle layers) |
-| E | Photo viewer at a point of interest (mouse free: click ◀ ▶ / ✕) |
-| ← → | Previous / next photo |
+| P | Next photo at a point of interest |
 | H | Help overlay |
 | Esc | Release the mouse (click to recapture) |
 
