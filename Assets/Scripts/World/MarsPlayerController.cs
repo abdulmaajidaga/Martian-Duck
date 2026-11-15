@@ -25,6 +25,21 @@ public class MarsPlayerController : MonoBehaviour
     [Tooltip("How quickly speed changes in the air (m/s²). Some control is kept so short hops over bumps don't feel like lost input.")]
     [SerializeField, Min(0f)] float airAcceleration = 8f;
 
+    [Header("Explore mode")]
+    [Tooltip("Explore (creative) mode: much faster movement for getting around the 45 km map. Toggled from the HUD (X).")]
+    [SerializeField] bool exploreMode;
+    [Tooltip("Walking speed in explore mode (m/s).")]
+    [SerializeField, Min(0f)] float exploreWalkSpeed = 30f;
+    [Tooltip("Speed while holding Shift in explore mode (m/s).")]
+    [SerializeField, Min(0f)] float exploreSprintSpeed = 150f;
+    [Tooltip("How quickly speed changes in explore mode, on the ground and in the air (m/s²).")]
+    [SerializeField, Min(0f)] float exploreAcceleration = 250f;
+
+    /// <summary>Explore (creative) mode: very fast walking/sprinting with full air control.</summary>
+    public bool ExploreMode { get => exploreMode; set => exploreMode = value; }
+    /// <summary>Current horizontal speed (m/s).</summary>
+    public float HorizontalSpeed => horizontalVelocity.magnitude;
+
     [Header("Ground following")]
     [Tooltip("After walking off a bump or down a slope, stick back to the ground if it is within this distance (m) instead of floating off in the low gravity.")]
     [SerializeField, Min(0f)] float groundSnapDistance = 0.8f;
@@ -139,9 +154,10 @@ public class MarsPlayerController : MonoBehaviour
 
         // Horizontal movement, with full control on the ground and limited control in the air.
         Vector2 input = Vector2.ClampMagnitude(ReadMoveInput(), 1f);
-        float targetSpeed = SprintHeld() ? sprintSpeed : walkSpeed;
+        bool sprint = SprintHeld();
+        float targetSpeed = exploreMode ? (sprint ? exploreSprintSpeed : exploreWalkSpeed) : (sprint ? sprintSpeed : walkSpeed);
         Vector3 targetVelocity = (transform.right * input.x + transform.forward * input.y) * targetSpeed;
-        float acceleration = grounded ? groundAcceleration : airAcceleration;
+        float acceleration = exploreMode ? exploreAcceleration : grounded ? groundAcceleration : airAcceleration;
         horizontalVelocity = Vector3.MoveTowards(horizontalVelocity, targetVelocity, acceleration * dt);
 
         // Vertical movement.

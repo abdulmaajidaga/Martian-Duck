@@ -177,7 +177,7 @@ public class MarsMission : MonoBehaviour
                     Guide(RocketPosition(), $"Press C to deposit the cores  ·  {Drilled}/{TotalSites} cores");
                     if (action) SetStage(Stage.AllComplete);
                 }
-                else Guide(RocketPosition(), $"Return to the rocket  ·  {Drilled}/{TotalSites} cores");
+                else Guide(RocketPosition(), Flashing() ? flash : $"Return to the rocket  ·  {Drilled}/{TotalSites} cores");
                 break;
         }
     }
@@ -253,7 +253,8 @@ public class MarsMission : MonoBehaviour
                 Debug.Log($"[Mission] Mission 2: drill {TotalSites} sites and return the cores.", this);
                 break;
             case Stage.ReturnCores:
-                Guide(RocketPosition(), $"Return to the rocket  ·  {Drilled}/{TotalSites} cores");
+                // Keep the last core's science line on screen for its full time before switching the instruction.
+                Guide(RocketPosition(), Flashing() ? flash : $"Return to the rocket  ·  {Drilled}/{TotalSites} cores");
                 Debug.Log("[Mission] All sites drilled - return to the rocket.", this);
                 break;
             case Stage.AllComplete:
@@ -298,6 +299,15 @@ public class MarsMission : MonoBehaviour
         if (guide == null) return;
         guide.transform.position = position;
         guide.displayName = label;
+        // The route system auto-advances past a reached waypoint; keep the mission's single moving waypoint current.
+        // (Only for the mission's own route, so a route planned on the map isn't overwritten.)
+        if (route != null && route.Next != guide && ContainsGuide(route)) route.SetRoute(new[] { guide });
+    }
+
+    bool ContainsGuide(RouteManager r)
+    {
+        foreach (Waypoint w in r.Waypoints) if (w == guide) return true;
+        return false;
     }
 
     void Flash(string text, float seconds = 3f) { flash = text; flashUntil = Time.time + seconds; if (guide != null) guide.displayName = text; }

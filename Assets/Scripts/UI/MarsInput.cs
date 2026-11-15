@@ -19,6 +19,8 @@ public static class MarsInput
     public static bool MapToggle => Pressed(Key.M);
     public static bool LayersToggle => Pressed(Key.L);
     public static bool HelpToggle => Pressed(Key.H);
+    /// <summary>Toggle explore (creative) mode: very fast movement.</summary>
+    public static bool ExploreToggle => Pressed(Key.X);
     /// <summary>Open / close the photo viewer at a point of interest.</summary>
     public static bool PoiViewerToggle => Pressed(Key.E);
     public static bool PhotoNext => Pressed(Key.RightArrow) || Pressed(Key.P);
@@ -71,6 +73,7 @@ public static class MarsInput
     public static bool MapToggle => Input.GetKeyDown(KeyCode.M);
     public static bool LayersToggle => Input.GetKeyDown(KeyCode.L);
     public static bool HelpToggle => Input.GetKeyDown(KeyCode.H);
+    public static bool ExploreToggle => Input.GetKeyDown(KeyCode.X);
     public static bool PoiViewerToggle => Input.GetKeyDown(KeyCode.E);
     public static bool PhotoNext => Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.P);
     public static bool PhotoPrev => Input.GetKeyDown(KeyCode.LeftArrow);

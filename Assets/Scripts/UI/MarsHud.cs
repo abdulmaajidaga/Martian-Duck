@@ -34,6 +34,7 @@ public class MarsHud : MonoBehaviour
     MarsPlayerController playerController;
     VisualElement root, layerPanel, layerList, help, hint;
     Label layerFoot;
+    VisualElement exploreBadge;
     readonly Dictionary<HudRegion, VisualElement> regions = new Dictionary<HudRegion, VisualElement>();
     readonly Dictionary<MarsDataLayer, Toggle> layerToggles = new Dictionary<MarsDataLayer, Toggle>();
     readonly HudContext ctx = new HudContext();
@@ -105,7 +106,14 @@ public class MarsHud : MonoBehaviour
         help = BuildHelp();
         root.Add(help);
 
-        hint = new Label("H  CONTROLS") { pickingMode = PickingMode.Ignore };
+        exploreBadge = new VisualElement { name = "explore-badge", pickingMode = PickingMode.Ignore };
+        exploreBadge.AddToClassList("explore-badge");
+        var eb = new Label("EXPLORE MODE") { pickingMode = PickingMode.Ignore }; eb.AddToClassList("explore-badge-title"); exploreBadge.Add(eb);
+        var eh = new Label("Very fast movement  ·  Shift to sprint  ·  X to exit") { pickingMode = PickingMode.Ignore };
+        eh.AddToClassList("explore-badge-hint"); exploreBadge.Add(eh);
+        root.Add(exploreBadge);
+
+        hint = new Label("H   Controls") { pickingMode = PickingMode.Ignore };
         hint.AddToClassList("hud-hint");
         root.Add(hint);
 
@@ -122,8 +130,8 @@ public class MarsHud : MonoBehaviour
         {
             ("W A S D", "Walk"), ("Mouse", "Look around"), ("Shift", "Sprint"), ("Space", "Jump"),
             ("M", "Map mode (movement paused)"), ("Scroll  + -", "Zoom map  ·  drag to pan  ·  R reset"), ("L", "Data layer panel"), ("1 - 9", "Toggle layers (panel open)"),
-            ("E", "Photo viewer at a point of interest"), ("← →", "Previous / next photo"),
-            ("H", "Show / hide this help"), ("Esc", "Release mouse  ·  click to recapture"),
+            ("C", "Collect / drill / deposit (missions)"), ("E", "Photo viewer at a point of interest"), ("← →", "Previous / next photo"),
+            ("X", "Explore mode (very fast movement)"), ("H", "Show / hide this help"), ("Esc", "Release mouse  ·  click to recapture"),
         };
         foreach (var (key, what) in rows)
         {
@@ -217,6 +225,8 @@ public class MarsHud : MonoBehaviour
         bool layersShown = map || layersOpenInHud;
         layerPanel.style.display = layersShown ? DisplayStyle.Flex : DisplayStyle.None;
         help.style.display = helpOpen ? DisplayStyle.Flex : DisplayStyle.None;
+        bool explore = playerController != null && playerController.ExploreMode;
+        exploreBadge.style.display = explore && Mode == HudModes.Hud ? DisplayStyle.Flex : DisplayStyle.None;
         hint.style.display = helpOpen ? DisplayStyle.None : DisplayStyle.Flex;
     }
 
@@ -230,6 +240,11 @@ public class MarsHud : MonoBehaviour
         if (MarsInput.MapToggle) ToggleMap();
         if (MarsInput.LayersToggle && Mode == HudModes.Hud) { layersOpenInHud = !layersOpenInHud; ApplyVisibility(); }
         if (MarsInput.HelpToggle) SetHelp(!helpOpen);
+        if (MarsInput.ExploreToggle && Mode == HudModes.Hud && playerController != null)
+        {
+            playerController.ExploreMode = !playerController.ExploreMode;
+            ApplyVisibility();
+        }
         if (helpAutoHideAt > 0f && Time.time >= helpAutoHideAt) SetHelp(false);
         int n = MarsInput.NumberPressed;
         if (n > 0 && layerPanel.style.display == DisplayStyle.Flex)
@@ -260,7 +275,7 @@ public class MarsHud : MonoBehaviour
         Vector3 p = player.position;
         float step = Vector3.Distance(p, lastPos);
         lastPos = p;
-        if (step > 20f) step = 0f;                                   // ignore teleports / respawns
+        if (step > 60f) step = 0f;                                   // ignore teleports / respawns (explore mode can cover ~3 m a frame)
         if (Mode == HudModes.Hud) ctx.distanceWalked += step;
         float instant = dt > 0f ? step / dt : 0f;
         ctx.speed = Mathf.Lerp(ctx.speed, instant, 1f - Mathf.Exp(-dt * 6f));   // smoothed
