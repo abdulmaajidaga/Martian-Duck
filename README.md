@@ -2,12 +2,13 @@
 
 # Martian Duck
 
-**Plan and walk a Marswalk in Jezero Crater, on real Mars data, at true scale.**
+**Plan a Marswalk on a 2D map, then see it in 3D on the ground around you: Jezero Crater, real Mars data, true scale.**
 
-![View from the western rim of Jezero across the crater, with the helmet HUD](docs/images/hero.jpg)
+![Spawning in Jezero Crater, entering the map and turning to the rocket](docs/gifs/01_spawn_rocket.gif)
 
 | | |
 |---|---|
+| **Visor** | AR-style: the 2D map on your helmet visor drives the 3D world, so planned routes and data layers appear on the terrain around you |
 | **Where** | The western half of Jezero Crater, 45 × 59 km, true scale, where NASA's Perseverance rover landed |
 | **Data** | Mars 2020 CTX terrain · CRISM/OMEGA minerals · TES dust · Perseverance's real path, samples and photos |
 | **Planner** | A* over a 4097 × 4097 height grid, cost = walking time (Tobler's hiking function), slope and dust aware |
@@ -20,6 +21,34 @@
 Martian Duck is a layered, interactive 3D map for planning and carrying out a Marswalk in Jezero Crater, where NASA's
 Perseverance rover landed. It covers the western half of the crater (45 × 59 km) at true scale, including the delta,
 the crater rim and the Three Forks sample depot. The explorer walks it in first person under Mars gravity.
+
+## The novelty: plan in 2D, see it in 3D
+
+Martian Duck works like an augmented-reality helmet visor. The 2D map opens on the visor, over the live 3D view of
+the terrain, and both show the same world. Whatever you plan or switch on in 2D appears in 3D around you:
+
+* **Routes:** pick stops on the map, and the planned route is drawn on the actual ground. You follow the line in
+  front of you instead of reading a map.
+* **Data layers:** turn on elevation, dust or minerals, and the layer is painted onto the terrain itself: on the map,
+  in the landscape seen through the visor behind it, and in the world when you walk. You see which slope is steep or
+  which ground is dusty right where you stand.
+* **Mission data:** Perseverance's path, its wheel tracks, the sampling sites, the depot tubes and the landmarks are
+  markers on the map and real objects in the 3D world.
+
+<p>
+  <img src="docs/images/map_full.jpg" alt="The 2D map on the visor, with the 3D landscape visible through it" width="49%">
+  <img src="docs/images/ar_3d_layers.jpg" alt="The elevation layer painted on the 3D terrain, seen from the crater rim" width="49%">
+</p>
+<p>
+  <img src="docs/images/route_planning.jpg" alt="Four stops picked on the map, reordered and routed: 8.2 km, about 57 min, computed in 1.4 s" width="49%">
+  <img src="docs/images/route_ground.jpg" alt="The planned route on the ground in the walking view, with the HUD" width="49%">
+</p>
+
+*Top: the map on the visor, with the world visible behind it; the elevation layer on the real 3D terrain, seen from the
+crater rim. Bottom: four sites picked on the 2D map, reordered and routed (8.2 km, about 57 min, steepest slope 13°,
+computed in 1.4 s); the route then lies on the ground in front of you.*
+
+![Following the planned path on the ground](docs/gifs/03_planned_path.gif)
 
 ## How it works
 
@@ -40,13 +69,7 @@ function. Ground steeper than 30° is excluded and ground near that limit is pen
 several stops, the planner chooses the best visiting order. It reports distance, climb, maximum slope and time, and
 re-plans when the explorer strays. A helmet HUD guides the walk with navigation, a compass, waypoints and data layers.
 
-<p>
-  <img src="docs/images/route_planning.jpg" alt="Four stops picked on the map, reordered and routed: 8.2 km, about 57 min, computed in 1.4 s" width="49%">
-  <img src="docs/images/route_ground.jpg" alt="The planned route on the ground in the walking view, with the HUD" width="49%">
-</p>
-
-*Left: four sites picked on the map; the planner reorders them and routes 8.2 km (about 57 min, steepest slope 13°)
-in 1.4 s. Right: the same kind of route on the ground while walking.*
+![The map and the route planner: picking stops, reordering and routing](docs/gifs/05_map_planner.gif)
 
 **Real places, real photos.** Walk up to any of 86 points of interest (sampling sites, depot tubes, landmarks,
 Ingenuity's airfields) to see what Perseverance did there and its own images of the spot.
@@ -63,8 +86,8 @@ Two missions give the walk a science purpose. The first retrieves the depot's sa
 to the potential biosignature rock Cheyava Falls.
 
 <p>
-  <img src="docs/images/mission_tube.jpg" alt="Collecting a sample tube at the Three Forks depot" width="49%">
-  <img src="docs/images/mission2_drilling.jpg" alt="Drilling at South Séítah during Follow the water" width="49%">
+  <img src="docs/gifs/02_mission1_collect.gif" alt="Mission 1: walking to the Three Forks depot and collecting the sample tubes" width="49%">
+  <img src="docs/gifs/04_mission2_drill.gif" alt="Mission 2: drilling samples at the Follow the water sites" width="49%">
 </p>
 
 ## Benefits and impact
@@ -75,7 +98,8 @@ outreach.
 
 ## Creativity
 
-Most Mars maps are static 2D layers. This one puts you on the ground at true scale. The planner models human walking
+Most Mars maps are static 2D layers. This one puts you on the ground at true scale and turns the map into an AR visor:
+the routes and layers you plan in 2D are projected onto the 3D terrain around you. The planner models human walking
 (speed, slope, footing) rather than straight lines, and the science mission follows the history of water at Jezero.
 
 ## Factors considered
