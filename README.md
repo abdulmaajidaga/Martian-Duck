@@ -4,7 +4,7 @@
 
 **Plan a Marswalk on a 2D map, then see it in 3D on the ground around you: Jezero Crater, real Mars data, true scale.**
 
-![Spawning in Jezero Crater, entering the map and turning to the rocket](docs/gifs/01_spawn_rocket.gif)
+![Spawning in Jezero Crater, entering the map and turning to the rocket](docs/gifs/one.gif)
 
 | | |
 |---|---|
@@ -48,7 +48,7 @@ the terrain, and both show the same world. Whatever you plan or switch on in 2D 
 crater rim. Bottom: four sites picked on the 2D map, reordered and routed (8.2 km, about 57 min, steepest slope 13°,
 computed in 1.4 s); the route then lies on the ground in front of you.*
 
-![Following the planned path on the ground](docs/gifs/03_planned_path.gif)
+![Following the planned path on the ground](docs/gifs/three.gif)
 
 ## How it works
 
@@ -86,7 +86,7 @@ Two missions give the walk a science purpose. The first retrieves the depot's sa
 to the potential biosignature rock Cheyava Falls.
 
 <p>
-  <img src="docs/gifs/02_mission1_collect.gif" alt="Mission 1: walking to the Three Forks depot and collecting the sample tubes" width="49%">
+  <img src="docs/gifs/two.gif" alt="Mission 1: walking to the Three Forks depot and collecting the sample tubes" width="49%">
   <img src="docs/gifs/04_mission2_drill.gif" alt="Mission 2: drilling samples at the Follow the water sites" width="49%">
 </p>
 
