@@ -110,6 +110,7 @@ public class MarsHud : MonoBehaviour
         {
             ("W A S D", "Walk"), ("Mouse", "Look around"), ("Shift", "Sprint"), ("Space", "Jump"),
             ("M", "Map mode (movement paused)"), ("L", "Data layer panel"), ("1 - 9", "Toggle layers (panel open)"),
+            ("P", "Next photo at a point of interest"),
             ("H", "Show / hide this help"), ("Esc", "Release mouse  ·  click to recapture"),
         };
         foreach (var (key, what) in rows)

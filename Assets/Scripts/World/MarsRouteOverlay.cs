@@ -38,34 +38,9 @@ public class MarsRouteOverlay : MonoBehaviour
     [SerializeField] bool showLabels = true;
     [SerializeField, Min(0.01f)] float labelSize = 0.12f;
 
-    [Header("Visibility")]
-    [SerializeField] bool showDrivePath = true;
-    [SerializeField] bool showDepotZone = true;
-    [SerializeField] bool showSamplingSites = true;
-
-    void OnValidate()
-    {
-#if UNITY_EDITOR
-        // Changing active state inside OnValidate triggers Unity warnings, so apply it right after.
-        UnityEditor.EditorApplication.delayCall += () => { if (this != null) ApplyVisibility(); };
-#else
-        ApplyVisibility();
-#endif
-    }
-
-    void ApplyVisibility()
-    {
-        SetGroupActive(GroupNames[0], showDrivePath);
-        SetGroupActive(GroupNames[1], showDepotZone);
-        SetGroupActive(GroupNames[2], showSamplingSites);
-    }
-
-    void SetGroupActive(string groupName, bool active)
-    {
-        Transform t = transform.Find(groupName);
-        if (t != null && t.gameObject.activeSelf != active)
-            t.gameObject.SetActive(active);
-    }
+    // Visibility: switch the whole overlay, or its "Drive Path" / "Depot Zone" / "Sampling Sites" children, on or
+    // off with their checkboxes in the Hierarchy/Inspector. This script never changes them after building, so the
+    // state you set is what you get in Play mode. (The object is tagged EditorOnly, so it is left out of builds.)
 
     [ContextMenu("Build Overlays")]
     public void Build()
@@ -132,7 +107,6 @@ public class MarsRouteOverlay : MonoBehaviour
         foreach (Sample s in data.samples ?? Array.Empty<Sample>())
             AddMarker(sites, s, Ground(s.x, s.y) - Vector3.up * heightOffset);
 
-        ApplyVisibility();
         Debug.Log($"{LogPrefix}Built {lines} drive lines ({points} points), depot zone and {data.samples?.Length ?? 0} sampling sites.", this);
     }
 

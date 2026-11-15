@@ -20,6 +20,7 @@ public class MarsMapMode : HudModule
     VisualElement waypointLayer, scaleBar;
     Label scaleLabel, coords;
     readonly List<(VisualElement root, Label label)> wpMarkers = new List<(VisualElement, Label)>();
+    readonly List<(VisualElement root, Label label)> poiMarkers = new List<(VisualElement, Label)>();
 
     void Reset() => SetPlacement(HudRegion.FullScreen, 0, HudModes.Map);
 
@@ -110,10 +111,25 @@ public class MarsMapMode : HudModule
         playerMarker.style.left = pp.x - 11f; playerMarker.style.top = pp.y - 13f;
         playerMarker.SetAngle(ctx.headingDeg);
 
+        // Points of interest (drawn first so waypoints sit on top)
+        var pois = PointOfInterest.Registered;
+        while (poiMarkers.Count < pois.Count) poiMarkers.Add(NewMarker("map-poi", "map-poi-dot", "map-poi-label"));
+        for (int i = 0; i < poiMarkers.Count; i++)
+        {
+            PointOfInterest p = i < pois.Count ? pois[i] : null;
+            var (el, label) = poiMarkers[i];
+            bool show = p != null && p.isActiveAndEnabled;
+            el.style.display = show ? DisplayStyle.Flex : DisplayStyle.None;
+            if (!show) continue;
+            Vector2 sp = ToPanel(p.Position);
+            el.style.left = sp.x - 6f; el.style.top = sp.y - 6f;
+            label.text = string.IsNullOrEmpty(p.shortName) ? p.displayName : p.shortName;
+        }
+
         // Waypoints
         RouteManager route = ctx.route;
         int count = route != null ? route.Waypoints.Count : 0;
-        while (wpMarkers.Count < count) wpMarkers.Add(NewWaypointMarker());
+        while (wpMarkers.Count < count) wpMarkers.Add(NewMarker("map-waypoint", "map-waypoint-dot", "map-waypoint-label"));
         for (int i = 0; i < wpMarkers.Count; i++)
         {
             Waypoint w = i < count ? route.Waypoints[i] : null;
@@ -140,12 +156,12 @@ public class MarsMapMode : HudModule
         coords.text = $"{MarsGeoReference.FormatLatitude(lat)}   {MarsGeoReference.FormatLongitude(lon)}   ·   {ctx.geo.ElevationAt(ctx.player.position):0} m";
     }
 
-    (VisualElement, Label) NewWaypointMarker()
+    (VisualElement, Label) NewMarker(string rootClass, string dotClass, string labelClass)
     {
         var el = new VisualElement { pickingMode = PickingMode.Ignore };
-        el.AddToClassList("map-waypoint");
-        var dot = new VisualElement { pickingMode = PickingMode.Ignore }; dot.AddToClassList("map-waypoint-dot"); el.Add(dot);
-        var label = new Label { pickingMode = PickingMode.Ignore }; label.AddToClassList("map-waypoint-label"); el.Add(label);
+        el.AddToClassList(rootClass);
+        var dot = new VisualElement { pickingMode = PickingMode.Ignore }; dot.AddToClassList(dotClass); el.Add(dot);
+        var label = new Label { pickingMode = PickingMode.Ignore }; label.AddToClassList(labelClass); el.Add(label);
         waypointLayer.Add(el);
         return (el, label);
     }

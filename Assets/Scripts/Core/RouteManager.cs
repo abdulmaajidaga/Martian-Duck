@@ -58,6 +58,40 @@ public class RouteManager : MonoBehaviour
         RouteChanged?.Invoke();
     }
 
+    /// <summary>The plan the current route came from (null if the route was set by hand).</summary>
+    public PlannedPath CurrentPlan { get; private set; }
+
+    Transform plannedParent;
+
+    /// <summary>
+    /// Follow a planned path: one waypoint per stop, in the plan's visit order (created at runtime under
+    /// "Planned Route" and not saved). The HUD's waypoint panel and map pick it up automatically.
+    /// </summary>
+    public void SetRoute(PlannedPath plan, float arriveRadius = 5f)
+    {
+        if (plannedParent != null) Destroy(plannedParent.gameObject);
+        CurrentPlan = plan;
+        var route = new List<Waypoint>();
+        if (plan != null && plan.success)
+        {
+            plannedParent = new GameObject("Planned Route") { hideFlags = HideFlags.DontSave }.transform;
+            plannedParent.SetParent(transform, false);
+            foreach (PathStop stop in plan.visitOrder)
+            {
+                var go = new GameObject(stop.name) { hideFlags = HideFlags.DontSave };
+                go.transform.SetParent(plannedParent, false);
+                var w = go.AddComponent<Waypoint>();
+                w.placeByLonLat = false;
+                w.displayName = stop.name;
+                w.arriveRadius = arriveRadius;
+                go.transform.position = stop.position;
+                if (stop.poi != null) { w.description = stop.poi.subtitle; if (stop.poi.photos.Count > 0) w.image = stop.poi.photos[0].image; }
+                route.Add(w);
+            }
+        }
+        SetRoute(route);
+    }
+
     public void Add(Waypoint w) { waypoints.Add(w); RouteChanged?.Invoke(); }
     public void Clear() { waypoints.Clear(); CurrentIndex = 0; RouteChanged?.Invoke(); }
     public void Restart() { CurrentIndex = 0; RouteChanged?.Invoke(); }

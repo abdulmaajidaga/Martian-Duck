@@ -19,6 +19,7 @@ public static class MarsInput
     public static bool MapToggle => Pressed(Key.M);
     public static bool LayersToggle => Pressed(Key.L);
     public static bool HelpToggle => Pressed(Key.H);
+    public static bool NextPhoto => Pressed(Key.P);
 
     /// <summary>1..9 if a number key (top row or keypad) was pressed this frame, otherwise 0.</summary>
     public static int NumberPressed
@@ -35,6 +36,7 @@ public static class MarsInput
     public static bool MapToggle => Input.GetKeyDown(KeyCode.M);
     public static bool LayersToggle => Input.GetKeyDown(KeyCode.L);
     public static bool HelpToggle => Input.GetKeyDown(KeyCode.H);
+    public static bool NextPhoto => Input.GetKeyDown(KeyCode.P);
 
     public static int NumberPressed
     {

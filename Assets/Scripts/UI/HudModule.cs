@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 /// <summary>Screen areas a HUD module can sit in. Edges only, so the centre of the view stays clear.</summary>
-public enum HudRegion { TopCenter, TopLeft, TopRight, BottomLeft, BottomRight, LeftMiddle, FullScreen }
+public enum HudRegion { TopCenter, TopLeft, TopRight, BottomLeft, BottomRight, LeftMiddle, FullScreen, RightMiddle }
 
 /// <summary>Interface modes. A module chooses which modes it is visible in.</summary>
 [Flags] public enum HudModes { Hud = 1, Map = 2 }
