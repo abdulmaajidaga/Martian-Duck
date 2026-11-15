@@ -249,6 +249,9 @@ public class MarsMission : MonoBehaviour
                 break;
             case Stage.DrillSites:
                 foreach (DrillSite d in drillSites) if (d.marker != null) d.marker.SetActive(true);
+                // Point at the first site right away, so path planning (which re-plans on StageChanged) targets it
+                // instead of the rocket the waypoint was still on.
+                { DrillSite first = NextSite(); if (first != null) Guide(SitePosition(first), $"Drill site: {first.name} ({first.kind})"); }
                 Flash($"Mission 2 · Follow the water: drill {TotalSites} sites, then return to the rocket", 5f);
                 Debug.Log($"[Mission] Mission 2: drill {TotalSites} sites and return the cores.", this);
                 break;

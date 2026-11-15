@@ -106,7 +106,8 @@ public class MarsMapMode : HudModule
         Text(titleCard, "poi-eyebrow", "MAP  ·  MOVEMENT PAUSED");
         Text(titleCard, "poi-title", "Three Forks area, Jezero Crater");
         VisualElement keys = Box(titleCard, "map-keys");
-        KeyRow(keys, "Click", "Add / remove a stop");
+        KeyRow(keys, "Click", "Near a site: add / remove stop");
+        KeyRow(keys, "Right-click", "Clear all stops");
         KeyRow(keys, "Scroll", "Zoom   (or  + / -)");
         KeyRow(keys, "Drag", "Move the map");
         KeyRow(keys, "R", "Reset view");

@@ -8,8 +8,11 @@ using UnityEngine.InputSystem;
 /// <summary>
 /// Best walking route from the astronaut to the places chosen on the map (M):
 ///   • points of interest picked with the map's own stop list (click a marker; MarsMapMode.SelectedStops), and
-///   • any spot on the ground: click the map (a click, not a drag; drag still pans). Shift + click adds another
-///     spot instead of replacing the clicked one.
+///   • clicking the map locks on to the nearest point of interest (within POI Snap Pixels of the click) and
+///     adds/removes it as a stop, so you don't have to hit the small marker exactly. A click, not a drag
+///     (drag still pans).
+///   • only with "Allow Ground Spots" on: a click far from any point of interest picks that spot on the ground
+///     (Shift + click adds another spot instead of replacing it).
 ///   • Right click clears the clicked spots and the map's stop list.
 /// The route is re-planned whenever the choice changes and drawn by PlannedPathRenderer. When there is no
 /// MarsMission guiding the player, a successful plan also becomes the active route (RouteManager), so the HUD's
@@ -25,6 +28,10 @@ public class MapClickRoutePlanner : MonoBehaviour
     [SerializeField, Min(1f)] float arriveRadius = 8f;
     [Tooltip("A press that moves more than this (screen pixels) is a drag (map pan), not a click.")]
     [SerializeField, Min(1f)] float clickMaxMovePixels = 6f;
+    [Tooltip("A click on the map locks on to the nearest point of interest within this distance (screen pixels).")]
+    [SerializeField, Min(4f)] float poiSnapPixels = 60f;
+    [Tooltip("Let a click far from every point of interest pick a spot on the bare ground. Off = points of interest only.")]
+    [SerializeField] bool allowGroundSpots;
     [SerializeField] bool logPlans = true;
 
     /// <summary>The active instance (null if none).</summary>
@@ -65,6 +72,15 @@ public class MapClickRoutePlanner : MonoBehaviour
 
         Camera cam = MapCamera();
         if (cam == null) return;
+        // Lock on to a point of interest near the click (the map's stop list then raises SelectionChanged -> RequestPlan).
+        PointOfInterest poi = NearestPoiOnScreen(cam, pointer, poiSnapPixels);
+        if (poi != null)
+        {
+            if (subscribedMap != null) subscribedMap.ToggleStop(poi);
+            return;
+        }
+        if (!allowGroundSpots) return;
+
         Vector3 w = cam.ScreenToWorldPoint(new Vector3(pointer.x, pointer.y, cam.nearClipPlane));
         if (!MarsTerrainQuery.InBounds(w)) return;
         w = MarsTerrainQuery.OnSurface(w);
@@ -155,6 +171,22 @@ public class MapClickRoutePlanner : MonoBehaviour
         IPanel panel = hud.OverlayLayer != null ? hud.OverlayLayer.panel : null;
         if (panel == null) return false;
         return panel.Pick(RuntimePanelUtils.ScreenToPanel(panel, new Vector2(screenPos.x, Screen.height - screenPos.y))) != null;
+    }
+
+    /// <summary>The active point of interest whose map position is closest to <paramref name="screenPos"/>, within <paramref name="maxPixels"/>.</summary>
+    static PointOfInterest NearestPoiOnScreen(Camera cam, Vector2 screenPos, float maxPixels)
+    {
+        PointOfInterest best = null;
+        float bestD = maxPixels;
+        foreach (PointOfInterest p in PointOfInterest.Registered)
+        {
+            if (p == null || !p.isActiveAndEnabled) continue;
+            Vector3 sp = cam.WorldToScreenPoint(p.Position);
+            if (sp.z < 0f) continue;
+            float d = Vector2.Distance(screenPos, sp);
+            if (d <= bestD) { bestD = d; best = p; }
+        }
+        return best;
     }
 
     /// <summary>The top-down map camera (enabled orthographic camera looking straight down).</summary>

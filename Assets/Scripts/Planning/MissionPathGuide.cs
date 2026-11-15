@@ -16,6 +16,8 @@ public class MissionPathGuide : MonoBehaviour
     [SerializeField] bool planTubeCollectionOrder = true;
     [Tooltip("Points of interest whose display name starts with this are the mission's sample tubes.")]
     [SerializeField] string tubePrefix = "Depot tube";
+    [Tooltip("When a new mission starts, clear stops picked on the map so the path goes to the mission's next target.")]
+    [SerializeField] bool clearMapStopsOnNewMission = true;
 
     [Header("When to re-plan")]
     [SerializeField, Min(0.1f)] float checkInterval = 0.5f;
@@ -51,9 +53,17 @@ public class MissionPathGuide : MonoBehaviour
         showing = false;
     }
 
-    void OnStage(MarsMission m) => dirty = true;
+    void OnStage(MarsMission m)
+    {
+        dirty = true;
+        nextCheck = 0f;                       // plan on the next frame, not after the check interval
+        // A new mission starts: drop stops left over from the map so the planner goes straight to the new target.
+        if (clearMapStopsOnNewMission && (m.CurrentStage == MarsMission.Stage.DrillSites || m.CurrentStage == MarsMission.Stage.GoToDepot)
+            && MapClickRoutePlanner.Current != null && MapClickRoutePlanner.Current.HasStops)
+            MapClickRoutePlanner.Current.ClearAll();
+    }
     void OnTube(MarsMission m, PointOfInterest p) { collected.Add(p); dirty = true; }
-    void OnSite(MarsMission m, MarsMission.DrillSite s) => dirty = true;
+    void OnSite(MarsMission m, MarsMission.DrillSite s) { dirty = true; nextCheck = 0f; }
 
     void Update()
     {

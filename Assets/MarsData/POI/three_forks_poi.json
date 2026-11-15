@@ -299,76 +299,6 @@
   {
    "kind": "depot_tube",
    "category": "Depot tube",
-   "name": "Depot tube 3",
-   "short_name": "Tube 3",
-   "activity": "Perseverance set sample tube 3 of 10 down here while building the Three Forks depot, a backup set of samples for a future Mars Sample Return mission.",
-   "when": "Sol 661  ·  Dec 30, 2022",
-   "subtitle": "Sample tube left at the Three Forks depot",
-   "details": "Dropped on sol 661 (3 of 10)  ·  photographed sol 661 (2022-12-29)\nPosition: where the rover parked to drop it (about 1-2 m)",
-   "lon": 77.408056,
-   "lat": 18.45267,
-   "reveal_radius_m": 4,
-   "photos": [
-    {
-     "file": "Photos/depot_tube_03_1.jpg",
-     "caption": "WATSON: the tube on the ground under the rover, just after the drop",
-     "camera": "WATSON",
-     "sol": 661,
-     "utc": "2022-12-29T21:56:26.767",
-     "image_id": "SIF_0661_0725622430_519EBY_N0320378SRLC08040_0000LMJ",
-     "source": "https://mars.nasa.gov/mars2020/multimedia/raw-images/SIF_0661_0725622430_519EBY_N0320378SRLC08040_0000LMJ",
-     "credit": "NASA/JPL-Caltech/MSSS"
-    },
-    {
-     "file": "Photos/depot_tube_03_2.jpg",
-     "caption": "Front Hazcam: the tube on the ground after the rover backed away",
-     "camera": "Front Hazcam (left)",
-     "sol": 663,
-     "utc": "2023-01-01T01:36:06.776",
-     "image_id": "FLF_0663_0725808410_441ECM_N0320390FHAZ08111_07_095J",
-     "source": "https://mars.nasa.gov/mars2020/multimedia/raw-images/FLF_0663_0725808410_441ECM_N0320390FHAZ08111_07_095J",
-     "credit": "NASA/JPL-Caltech"
-    }
-   ]
-  },
-  {
-   "kind": "depot_tube",
-   "category": "Depot tube",
-   "name": "Depot tube 4",
-   "short_name": "Tube 4",
-   "activity": "Perseverance set sample tube 4 of 10 down here while building the Three Forks depot, a backup set of samples for a future Mars Sample Return mission.",
-   "when": "Sol 666  ·  Jan 4, 2023",
-   "subtitle": "Sample tube left at the Three Forks depot",
-   "details": "Dropped on sol 666 (4 of 10)  ·  photographed sol 666 (2023-01-04)\nPosition: where the rover parked to drop it (about 1-2 m)",
-   "lon": 77.408078,
-   "lat": 18.452766,
-   "reveal_radius_m": 4,
-   "photos": [
-    {
-     "file": "Photos/depot_tube_04_1.jpg",
-     "caption": "WATSON: the tube on the ground under the rover, just after the drop",
-     "camera": "WATSON",
-     "sol": 666,
-     "utc": "2023-01-04T02:28:33.292",
-     "image_id": "SIF_0666_0726070752_851EBY_N0320482SRLC08040_0000LMJ",
-     "source": "https://mars.nasa.gov/mars2020/multimedia/raw-images/SIF_0666_0726070752_851EBY_N0320482SRLC08040_0000LMJ",
-     "credit": "NASA/JPL-Caltech/MSSS"
-    },
-    {
-     "file": "Photos/depot_tube_04_2.jpg",
-     "caption": "Front Hazcam: the tube on the ground after the rover backed away",
-     "camera": "Front Hazcam (left)",
-     "sol": 667,
-     "utc": "2023-01-05T01:51:39.763",
-     "image_id": "FLF_0667_0726154941_130ECM_N0320494FHAZ08111_07_095J",
-     "source": "https://mars.nasa.gov/mars2020/multimedia/raw-images/FLF_0667_0726154941_130ECM_N0320494FHAZ08111_07_095J",
-     "credit": "NASA/JPL-Caltech"
-    }
-   ]
-  },
-  {
-   "kind": "depot_tube",
-   "category": "Depot tube",
    "name": "Depot tube 5",
    "short_name": "Tube 5",
    "activity": "Perseverance set sample tube 5 of 10 down here while building the Three Forks depot, a backup set of samples for a future Mars Sample Return mission.",
@@ -397,41 +327,6 @@
      "utc": "2023-01-08T03:41:19.097",
      "image_id": "FLF_0670_0726420719_881ECM_N0320592FHAZ08111_06_095J",
      "source": "https://mars.nasa.gov/mars2020/multimedia/raw-images/FLF_0670_0726420719_881ECM_N0320592FHAZ08111_06_095J",
-     "credit": "NASA/JPL-Caltech"
-    }
-   ]
-  },
-  {
-   "kind": "depot_tube",
-   "category": "Depot tube",
-   "name": "Depot tube 6",
-   "short_name": "Tube 6",
-   "activity": "Perseverance set sample tube 6 of 10 down here while building the Three Forks depot, a backup set of samples for a future Mars Sample Return mission.",
-   "when": "Sol 672  ·  Jan 10, 2023",
-   "subtitle": "Sample tube left at the Three Forks depot",
-   "details": "Dropped on sol 672 (6 of 10)  ·  photographed sol 672 (2023-01-10)\nPosition: where the rover parked to drop it (about 1-2 m)",
-   "lon": 77.408244,
-   "lat": 18.452813,
-   "reveal_radius_m": 4,
-   "photos": [
-    {
-     "file": "Photos/depot_tube_06_1.jpg",
-     "caption": "WATSON: the tube on the ground under the rover, just after the drop",
-     "camera": "WATSON",
-     "sol": 672,
-     "utc": "2023-01-10T06:34:40.499",
-     "image_id": "SIF_0672_0726603916_031EBY_N0320672SRLC08040_0000LMJ",
-     "source": "https://mars.nasa.gov/mars2020/multimedia/raw-images/SIF_0672_0726603916_031EBY_N0320672SRLC08040_0000LMJ",
-     "credit": "NASA/JPL-Caltech/MSSS"
-    },
-    {
-     "file": "Photos/depot_tube_06_2.jpg",
-     "caption": "Front Hazcam: the tube on the ground after the rover backed away",
-     "camera": "Front Hazcam (left)",
-     "sol": 674,
-     "utc": "2023-01-12T06:13:31.485",
-     "image_id": "FLF_0674_0726775447_987ECM_N0320684FHAZ08111_06_095J",
-     "source": "https://mars.nasa.gov/mars2020/multimedia/raw-images/FLF_0674_0726775447_987ECM_N0320684FHAZ08111_06_095J",
      "credit": "NASA/JPL-Caltech"
     }
    ]
@@ -474,41 +369,6 @@
   {
    "kind": "depot_tube",
    "category": "Depot tube",
-   "name": "Depot tube 8",
-   "short_name": "Tube 8",
-   "activity": "Perseverance set sample tube 8 of 10 down here while building the Three Forks depot, a backup set of samples for a future Mars Sample Return mission.",
-   "when": "Sol 680  ·  Jan 18, 2023",
-   "subtitle": "Sample tube left at the Three Forks depot",
-   "details": "Dropped on sol 680 (8 of 10)  ·  photographed sol 680 (2023-01-18)\nPosition: where the rover parked to drop it (about 1-2 m)",
-   "lon": 77.408505,
-   "lat": 18.453005,
-   "reveal_radius_m": 4,
-   "photos": [
-    {
-     "file": "Photos/depot_tube_08_1.jpg",
-     "caption": "WATSON: the tube on the ground under the rover, just after the drop",
-     "camera": "WATSON",
-     "sol": 680,
-     "utc": "2023-01-18T11:07:46.077",
-     "image_id": "SIF_0680_0727311496_128EBY_N0320896SRLC08040_0000LMJ",
-     "source": "https://mars.nasa.gov/mars2020/multimedia/raw-images/SIF_0680_0727311496_128EBY_N0320896SRLC08040_0000LMJ",
-     "credit": "NASA/JPL-Caltech/MSSS"
-    },
-    {
-     "file": "Photos/depot_tube_08_2.jpg",
-     "caption": "Front Hazcam: the tube on the ground after the rover backed away",
-     "camera": "Front Hazcam (left)",
-     "sol": 681,
-     "utc": "2023-01-19T11:40:41.721",
-     "image_id": "FLF_0681_0727399873_270ECM_N0320908FHAZ08111_06_095J",
-     "source": "https://mars.nasa.gov/mars2020/multimedia/raw-images/FLF_0681_0727399873_270ECM_N0320908FHAZ08111_06_095J",
-     "credit": "NASA/JPL-Caltech"
-    }
-   ]
-  },
-  {
-   "kind": "depot_tube",
-   "category": "Depot tube",
    "name": "Depot tube 9",
    "short_name": "Tube 9",
    "activity": "Perseverance set sample tube 9 of 10 down here while building the Three Forks depot, a backup set of samples for a future Mars Sample Return mission.",
@@ -544,37 +404,58 @@
   {
    "kind": "depot_tube",
    "category": "Depot tube",
-   "name": "Depot tube 10",
-   "short_name": "Tube 10",
-   "activity": "Perseverance set sample tube 10 of 10 down here while building the Three Forks depot, a backup set of samples for a future Mars Sample Return mission.",
-   "when": "Sol 687  ·  Jan 25, 2023",
-   "subtitle": "Sample tube left at the Three Forks depot",
-   "details": "Dropped on sol 687 (10 of 10)  ·  photographed sol 690 (2023-01-28)\nPosition: where the rover parked to drop it (about 1-2 m)",
-   "lon": 77.408447,
-   "lat": 18.453372,
+   "name": "Depot tube 11",
+   "short_name": "Tube 11",
+   "activity": "Sample 11, Skyland: sedimentary rock cored at Skinner Ridge (Fan Front) on sol 495. Perseverance later left it at the Three Forks depot, a backup set of samples for a future Mars Sample Return mission.",
+   "when": "Cored sol 495  ·  Jul 12, 2022",
+   "subtitle": "Sample 11 (Skyland) left at the Three Forks depot",
+   "details": "Sample 11 of the Mars 2020 list (Sampling Locations.geojson): Skyland, Sedimentary, Fan Front\nPosition: one of the depot's real tube drop spots",
+   "lon": 77.408056,
+   "lat": 18.45267,
    "reveal_radius_m": 4,
-   "photos": [
-    {
-     "file": "Photos/depot_tube_10_1.jpg",
-     "caption": "WATSON: the tube on the ground under the rover, just after the drop",
-     "camera": "WATSON",
-     "sol": 690,
-     "utc": "2023-01-28T19:27:22.120",
-     "image_id": "SIF_0690_0728205464_664EBY_N0321184SRLC08040_0000LMJ",
-     "source": "https://mars.nasa.gov/mars2020/multimedia/raw-images/SIF_0690_0728205464_664EBY_N0321184SRLC08040_0000LMJ",
-     "credit": "NASA/JPL-Caltech/MSSS"
-    },
-    {
-     "file": "Photos/depot_tube_10_2.jpg",
-     "caption": "Front Hazcam: the tube on the ground after the rover backed away",
-     "camera": "Front Hazcam (left)",
-     "sol": 693,
-     "utc": "2023-01-31T18:02:16.080",
-     "image_id": "FLF_0693_0728459560_816ECM_N0321196FHAZ08111_06_095J",
-     "source": "https://mars.nasa.gov/mars2020/multimedia/raw-images/FLF_0693_0728459560_816ECM_N0321196FHAZ08111_06_095J",
-     "credit": "NASA/JPL-Caltech"
-    }
-   ]
+   "photos": []
+  },
+  {
+   "kind": "depot_tube",
+   "category": "Depot tube",
+   "name": "Depot tube 13",
+   "short_name": "Tube 13",
+   "activity": "Sample 13, Bearwallow: sedimentary rock cored at Wildcat Ridge (Fan Front) on sol 516. Perseverance later left it at the Three Forks depot, a backup set of samples for a future Mars Sample Return mission.",
+   "when": "Cored sol 516  ·  Aug 3, 2022",
+   "subtitle": "Sample 13 (Bearwallow) left at the Three Forks depot",
+   "details": "Sample 13 of the Mars 2020 list (Sampling Locations.geojson): Bearwallow, Sedimentary, Fan Front\nPosition: one of the depot's real tube drop spots",
+   "lon": 77.408078,
+   "lat": 18.452766,
+   "reveal_radius_m": 4,
+   "photos": []
+  },
+  {
+   "kind": "depot_tube",
+   "category": "Depot tube",
+   "name": "Depot tube 15",
+   "short_name": "Tube 15",
+   "activity": "Sample 15, Mageik: sedimentary rock cored at Amalik (Fan Front) on sol 579. Perseverance later left it at the Three Forks depot, a backup set of samples for a future Mars Sample Return mission.",
+   "when": "Cored sol 579  ·  Oct 6, 2022",
+   "subtitle": "Sample 15 (Mageik) left at the Three Forks depot",
+   "details": "Sample 15 of the Mars 2020 list (Sampling Locations.geojson): Mageik, Sedimentary, Fan Front\nPosition: one of the depot's real tube drop spots",
+   "lon": 77.408244,
+   "lat": 18.452813,
+   "reveal_radius_m": 4,
+   "photos": []
+  },
+  {
+   "kind": "depot_tube",
+   "category": "Depot tube",
+   "name": "Depot tube 18",
+   "short_name": "Tube 18",
+   "activity": "Sample 18, Crosswind Lake: rock with likely mixed sedimentary and igneous grains cored at Observation Mountain (Fan Front) on sol 639. Perseverance later left it at the Three Forks depot, a backup set of samples for a future Mars Sample Return mission.",
+   "when": "Cored sol 639  ·  Dec 7, 2022",
+   "subtitle": "Sample 18 (Crosswind Lake) left at the Three Forks depot",
+   "details": "Sample 18 of the Mars 2020 list (Sampling Locations.geojson): Crosswind Lake, Likely mixed sedimentary and igneous grains, Fan Front\nPosition: one of the depot's real tube drop spots",
+   "lon": 77.408505,
+   "lat": 18.453005,
+   "reveal_radius_m": 4,
+   "photos": []
   }
  ]
 }
