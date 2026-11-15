@@ -17,6 +17,7 @@ public class HudContext
     public MarsGeoReference geo;
     public RouteManager route;
     public HudModes mode;
+    public bool helpOpen;             // the help overlay is showing
     public float headingDeg;          // 0 = north (+Z), clockwise
     public float speed;               // m/s, smoothed
     public float distanceWalked;      // m this session

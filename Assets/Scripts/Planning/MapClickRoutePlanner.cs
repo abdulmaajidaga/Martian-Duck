@@ -180,7 +180,7 @@ public class MapClickRoutePlanner : MonoBehaviour
         float bestD = maxPixels;
         foreach (PointOfInterest p in PointOfInterest.Registered)
         {
-            if (p == null || !p.isActiveAndEnabled) continue;
+            if (p == null || !p.isActiveAndEnabled || !MapOverlayLayer.IsShown(p)) continue;   // hidden on the map
             Vector3 sp = cam.WorldToScreenPoint(p.Position);
             if (sp.z < 0f) continue;
             float d = Vector2.Distance(screenPos, sp);

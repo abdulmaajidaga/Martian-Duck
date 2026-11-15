@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 /// <summary>
 /// Next waypoint: name, distance and a direction arrow (relative to where you are facing).
 /// When the mission moves on to a new task, the panel is shown large in the middle of the screen for a few seconds,
-/// then slides back to its usual place (top right).
+/// then slides back to its usual place (top right). While the help overlay is open it waits until it is closed.
 /// </summary>
 public class WaypointHudModule : HudModule
 {
@@ -63,7 +63,7 @@ public class WaypointHudModule : HudModule
 
     public override void Tick(HudContext ctx)
     {
-        UpdateSpotlight();
+        UpdateSpotlight(ctx.helpOpen);
         RouteManager route = ctx.route;
         if (route == null || !route.HasRoute)
         {
@@ -85,10 +85,10 @@ public class WaypointHudModule : HudModule
         detail.text = $"BRG {Mathf.RoundToInt(bearing) % 360:000}°   ·   {index + 1} of {route.Waypoints.Count}";
     }
 
-    void UpdateSpotlight()
+    void UpdateSpotlight(bool helpOpen)
     {
         if (Root == null || Root.panel == null) return;
-        if (spotlightPending)
+        if (spotlightPending && !helpOpen)   // wait until the help overlay is closed so they don't overlap
         {
             Rect me = Root.worldBound, screen = Root.panel.visualTree.worldBound;
             if (float.IsNaN(me.width) || me.width <= 0f) return;            // not laid out yet; try next frame

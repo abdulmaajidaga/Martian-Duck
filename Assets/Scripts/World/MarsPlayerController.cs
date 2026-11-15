@@ -39,6 +39,8 @@ public class MarsPlayerController : MonoBehaviour
     public bool ExploreMode { get => exploreMode; set => exploreMode = value; }
     /// <summary>Current horizontal speed (m/s).</summary>
     public float HorizontalSpeed => horizontalVelocity.magnitude;
+    /// <summary>Normal walking speed (m/s), without Shift or explore mode.</summary>
+    public float WalkSpeed => walkSpeed;
 
     [Header("Ground following")]
     [Tooltip("After walking off a bump or down a slope, stick back to the ground if it is within this distance (m) instead of floating off in the low gravity.")]

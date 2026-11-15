@@ -8,6 +8,18 @@ regenerate data with the tools in `Tools/`.
 ## Committed here
 - `Rover Drive Path.geojson`, `Rover Waypoints.geojson`, `Sample Depot Zone.geojson`, `Sampling Locations.geojson`
   (Mars 2020 route data used for the overlays and the rover tracks)
+- `m20_heli_waypoints.json`, `m20_heli_flight_path.json`: Ingenuity's 72 flights and airfields, from NASA's Mars 2020
+  mission map (`https://mars.nasa.gov/mmgis-maps/M20/Layers/json/<name>`). The waypoints feed the Ingenuity points
+  of interest; the flight path isn't drawn in the game yet.
+
+## Points of interest
+- `Tools/PoiPhotos/fetch_poi_photos.py` -> `Assets/MarsData/POI/three_forks_poi.json` (Three Forks sites and depot tubes,
+  photos picked by eye).
+- `Tools/PoiPhotos/make_jezero_pois.py` -> `Assets/MarsData/POI/jezero_poi.json`: the rest of the map: the other
+  sampling sites, landing site, Van Zyl Overlook, Perseverance's latest position, Ingenuity's airfields and the
+  IAU-named features inside the map (USGS Gazetteer of Planetary Nomenclature). Photos are picked automatically
+  from NASA's raw-image feed. In Unity, run "Build Points Of Interest" on the "Jezero Points of Interest" object
+  after regenerating.
 
 ## Current map: Jezero crater, 77.0–77.8°E, 17.7–18.7°N (not committed)
 Needed only to rebuild it with `Tools/RegionBuilder/build_region.py`:

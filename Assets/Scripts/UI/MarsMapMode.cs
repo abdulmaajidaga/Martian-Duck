@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 /// <summary>
 /// Map mode (M): a top-down orthographic camera over the whole terrain (north up) with the player's position and
-/// facing, waypoint markers, points of interest, a north arrow, a scale bar and the player's longitude/latitude.
+/// facing, waypoint markers, points of interest (each can be hidden with a MapOverlayLayer), a north arrow, a scale bar and the player's longitude/latitude.
 /// Data layers that draw on the terrain (e.g. Elevation tint) appear here too.
 ///
 /// The map is drawn over the (paused) first-person view, which shows through a translucent backdrop around the
@@ -30,7 +30,7 @@ public class MarsMapMode : HudModule
 
     [Header("Zoom")]
     [Tooltip("Maximum magnification relative to the whole-terrain view.")]
-    [SerializeField, Min(1f)] float maxZoom = 25f;
+    [SerializeField, Min(1f)] float maxZoom = 400f;
     [Tooltip("Zoom factor per scroll-wheel notch.")]
     [SerializeField, Range(1.05f, 2f)] float zoomPerNotch = 1.25f;
     [Tooltip("Zoom factor per second while + or - is held.")]
@@ -63,6 +63,8 @@ public class MarsMapMode : HudModule
     readonly List<(VisualElement root, Label label)> wpMarkers = new List<(VisualElement, Label)>();
     readonly List<(VisualElement root, Label label)> poiMarkers = new List<(VisualElement, Label)>();
     readonly List<PointOfInterest> stops = new List<PointOfInterest>();
+    readonly List<Rect> placedLabels = new List<Rect>();
+    const float LabelCharWidth = 7f;   // rough width of one map-label character (px), for decluttering
     bool selectionDirty = true;
 
     // Zoom / pan state
@@ -104,7 +106,7 @@ public class MarsMapMode : HudModule
 
         VisualElement titleCard = Card(left);
         Text(titleCard, "poi-eyebrow", "MAP  ·  MOVEMENT PAUSED");
-        Text(titleCard, "poi-title", "Three Forks area, Jezero Crater");
+        Text(titleCard, "poi-title", "Jezero Crater");
         VisualElement keys = Box(titleCard, "map-keys");
         KeyRow(keys, "Click", "Near a site: add / remove stop");
         KeyRow(keys, "Right-click", "Clear all stops");
@@ -257,11 +259,12 @@ public class MarsMapMode : HudModule
         if (Focused != null && !Focused.isActiveAndEnabled) { Focused = null; selectionDirty = true; }
         var pois = PointOfInterest.Registered;
         while (poiMarkers.Count < pois.Count) poiMarkers.Add(NewPoiMarker());
+        placedLabels.Clear();
         for (int i = 0; i < poiMarkers.Count; i++)
         {
             PointOfInterest p = i < pois.Count ? pois[i] : null;
             var (el, label) = poiMarkers[i];
-            bool show = p != null && p.isActiveAndEnabled;
+            bool show = p != null && p.isActiveAndEnabled && MapOverlayLayer.IsShown(p);
             el.style.display = show ? DisplayStyle.Flex : DisplayStyle.None;
             el.userData = show ? p : null;
             if (!show) continue;
@@ -270,13 +273,19 @@ public class MarsMapMode : HudModule
             int stop = stops.IndexOf(p);
             string name = string.IsNullOrEmpty(p.shortName) ? p.displayName : p.shortName;
             label.text = stop >= 0 ? $"{stop + 1}  ·  {name}" : name;
+            // Declutter: skip a label that would overlap one already drawn (the dot stays; zoom in to read it).
+            bool important = stop >= 0 || p == Focused;
+            var rect = new Rect(sp.x + 8f, sp.y - 10f, 12f + label.text.Length * LabelCharWidth, 20f);
+            bool clear = important || !placedLabels.Exists(r => r.Overlaps(rect));
+            label.style.display = clear ? DisplayStyle.Flex : DisplayStyle.None;
+            if (clear) placedLabels.Add(rect);
             el.EnableInClassList("map-poi-selected", stop >= 0);
             el.EnableInClassList("map-poi-focused", p == Focused);
         }
 
         // Waypoints
         RouteManager route = ctx.route;
-        int count = route != null ? route.Waypoints.Count : 0;
+        int count = route != null && MapOverlayLayer.IsShown(MapOverlayLayer.Content.Waypoints) ? route.Waypoints.Count : 0;
         while (wpMarkers.Count < count) wpMarkers.Add(NewMarker("map-waypoint", "map-waypoint-dot", "map-waypoint-label"));
         for (int i = 0; i < wpMarkers.Count; i++)
         {

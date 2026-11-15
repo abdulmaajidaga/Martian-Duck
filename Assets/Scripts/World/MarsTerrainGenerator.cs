@@ -99,8 +99,16 @@ public class MarsTerrainGenerator : MonoBehaviour
     [Tooltip("Extra clearance above the surface, in meters.")]
     [SerializeField, Min(0f)] float spawnClearance = 0.1f;
 
+    [Tooltip("Model used as the default astronaut's body, scaled to the astronaut's height with its feet at the pivot. " +
+             "If empty, a capsule is used.")]
+    [SerializeField] GameObject astronautModel;
+
     [Tooltip("Camera height above the feet for the default capsule astronaut, in meters.")]
     [SerializeField, Range(0.5f, 1.8f)] float eyeHeight = 1.65f;
+
+    [Tooltip("How far in front of the body's centre the camera sits, in meters, so the view starts just in front " +
+             "of the helmet instead of inside the model.")]
+    [SerializeField, Range(0f, 1.5f)] float eyeForward = 0.5f;
 
     [Header("Generation")]
     [Tooltip("Build the terrain (and player) when Play starts. Baking turns this off so Play uses the baked objects.")]
@@ -589,13 +597,7 @@ public class MarsTerrainGenerator : MonoBehaviour
         cc.center = new Vector3(0f, AstronautHeight * 0.5f, 0f);
         cc.stepOffset = 0.3f;
 
-        // Visual body. The default capsule mesh is 2 m tall with a 0.5 m radius.
-        GameObject body = GameObject.CreatePrimitive(PrimitiveType.Capsule);
-        body.name = "Body";
-        DestroyImmediate(body.GetComponent<Collider>()); // The CharacterController is the collider.
-        body.transform.SetParent(player.transform, false);
-        body.transform.localPosition = cc.center;
-        body.transform.localScale = new Vector3(AstronautRadius * 2f, AstronautHeight * 0.5f, AstronautRadius * 2f);
+        CreateBody(player.transform, cc.center);
 
         // Use the scene's Main Camera if there is one, otherwise create a camera.
         Camera cam = Camera.main;
@@ -616,14 +618,70 @@ public class MarsTerrainGenerator : MonoBehaviour
         }
 
         cam.transform.SetParent(player.transform, false);
-        cam.transform.localPosition = new Vector3(0f, eyeHeight, 0f);
+        cam.transform.localPosition = new Vector3(0f, eyeHeight, eyeForward);
         cam.transform.localRotation = Quaternion.identity;
-        cam.nearClipPlane = 0.05f; // Stays inside the body capsule, whose inner faces are culled.
+        cam.nearClipPlane = 0.05f; // Just in front of the helmet, so the body never clips into view.
         cam.farClipPlane = Mathf.Max(cam.farClipPlane, terrain.terrainData.size.magnitude);
 
         // Added last so the controller finds the camera in Awake.
         player.AddComponent<MarsPlayerController>();
         return player;
+    }
+
+    /// <summary>
+    /// Adds the astronaut's visual body under the player: the astronaut model scaled to AstronautHeight with its
+    /// feet at the pivot, or a capsule if no model is set. The CharacterController is the only collider.
+    /// </summary>
+    GameObject CreateBody(Transform player, Vector3 capsuleCenter)
+    {
+        if (astronautModel == null)
+        {
+            // The default capsule mesh is 2 m tall with a 0.5 m radius.
+            GameObject capsule = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+            capsule.name = "Body";
+            DestroyImmediate(capsule.GetComponent<Collider>());
+            capsule.transform.SetParent(player, false);
+            capsule.transform.localPosition = capsuleCenter;
+            capsule.transform.localScale = new Vector3(AstronautRadius * 2f, AstronautHeight * 0.5f, AstronautRadius * 2f);
+            return capsule;
+        }
+
+        GameObject body = Instantiate(astronautModel, player, false);
+        body.name = "Body";
+        foreach (Collider c in body.GetComponentsInChildren<Collider>(true))
+            DestroyImmediate(c);
+        body.transform.localPosition = Vector3.zero;
+        body.transform.localRotation = Quaternion.identity;
+        body.transform.localScale = Vector3.one;
+
+        // Fit the model's height to the astronaut and stand its lowest point on the pivot.
+        Bounds bounds = default;
+        bool any = false;
+        foreach (Renderer r in body.GetComponentsInChildren<Renderer>(true))
+        {
+            Bounds rb = r is SkinnedMeshRenderer smr && smr.sharedMesh != null
+                ? TransformBounds(smr.transform, smr.sharedMesh.bounds)
+                : r.bounds;
+            if (any) bounds.Encapsulate(rb); else { bounds = rb; any = true; }
+        }
+        if (any && bounds.size.y > 0.01f)
+        {
+            float scale = AstronautHeight / bounds.size.y;
+            body.transform.localScale = Vector3.one * scale;
+            float feet = player.InverseTransformPoint(bounds.min).y * scale;
+            body.transform.localPosition = new Vector3(0f, -feet, 0f);
+        }
+        return body;
+    }
+
+    static Bounds TransformBounds(Transform t, Bounds local)
+    {
+        var result = new Bounds(t.TransformPoint(local.center), Vector3.zero);
+        Vector3 e = local.extents;
+        for (int i = 0; i < 8; i++)
+            result.Encapsulate(t.TransformPoint(local.center + Vector3.Scale(e,
+                new Vector3((i & 1) == 0 ? -1 : 1, (i & 2) == 0 ? -1 : 1, (i & 4) == 0 ? -1 : 1))));
+        return result;
     }
 
     void RemovePlayer()

@@ -25,6 +25,22 @@
     margin-bottom: 10px;
     min-width: 240px;
 }
+/* the four corner panels (navigation, next waypoint, radiation & dust, suit): larger cards and text */
+.region-topleft .hud-panel, .region-topright .hud-panel,
+.region-bottomleft .hud-panel, .region-bottomright .hud-panel {
+    min-width: 320px; padding: 16px 22px 16px 22px;
+}
+.region-topleft .hud-title, .region-topright .hud-title,
+.region-bottomleft .hud-title, .region-bottomright .hud-title { font-size: 15px; margin-bottom: 8px; }
+.region-topleft .hud-label, .region-topright .hud-label,
+.region-bottomleft .hud-label, .region-bottomright .hud-label { font-size: 17px; min-width: 90px; }
+.region-topleft .hud-value, .region-topright .hud-value,
+.region-bottomleft .hud-value, .region-bottomright .hud-value { font-size: 26px; }
+.region-topleft .hud-small, .region-topright .hud-small,
+.region-bottomleft .hud-small, .region-bottomright .hud-small { font-size: 15px; }
+.region-topleft .hud-bar, .region-topright .hud-bar,
+.region-bottomleft .hud-bar, .region-bottomright .hud-bar { height: 10px; }
+
 .hud-row { flex-direction: row; align-items: center; margin: 1px 0 1px 0; }
 
 .hud-title, .hud-label, .hud-value, .hud-small, .hud-placeholder, .help-key, .hud-hint,
@@ -41,7 +57,11 @@
 
 .hud-bar { height: 8px; border-radius: 4px; background-color: rgba(250, 244, 236, 0.12); border-width: 0; margin: 4px 0 8px 0; overflow: hidden; }
 .hud-bar-fill { height: 100%; border-radius: 4px; background-color: rgb(240, 150, 80); }
+.hud-bar-fill-oxygen { background-color: rgb(110, 200, 230); }     /* oxygen: cool blue */
+.hud-bar-fill-radiation { background-color: rgb(235, 205, 80); }  /* radiation: yellow */
+.hud-bar-fill-dust { background-color: rgb(200, 150, 100); }      /* dust: tan */
 .hud-bar-warning { background-color: rgb(255, 100, 80); }
+.hud-bar-note { margin-top: -4px; margin-bottom: 6px; }
 
 .hud-hint {
     position: absolute; bottom: 14px; left: 50%; width: 240px; margin-left: -120px; padding: 6px 0 6px 0;
@@ -70,8 +90,8 @@
 .compass-heading { font-size: 18px; color: rgb(250, 244, 236); -unity-font-style: bold; letter-spacing: 1px; }
 
 /* ---------- waypoint ---------- */
-.waypoint-panel {
-    min-width: 300px; max-width: 460px;
+.waypoint-panel, .region-topright .waypoint-panel {
+    min-width: 380px; max-width: 520px;
     transition-property: translate, scale, background-color;
     transition-duration: 0.6s, 0.6s, 0.6s;
     transition-timing-function: ease-in-out-cubic, ease-in-out-cubic, ease-in-out-cubic;
@@ -154,7 +174,7 @@
 .layer-panel { position: absolute; left: 20px; top: 34%; min-width: 300px; }
 .layer-row { margin: 0 0 6px 0; padding: 8px 10px 8px 10px; border-radius: 8px; background-color: rgba(250, 244, 236, 0.05); }
 .layer-toggle { margin: 0; }
-.layer-toggle Label { color: rgb(250, 244, 236); font-size: 16px; min-width: 0; text-shadow: none; }
+.layer-toggle Label { color: rgb(250, 244, 236); font-size: 16px; min-width: 0; text-shadow: 0 0 0 rgba(0, 0, 0, 0); }
 .layer-toggle .unity-toggle__checkmark {
     width: 20px; height: 20px; margin-right: 10px; border-radius: 4px;
     border-color: rgba(250, 244, 236, 0.45); background-color: rgba(250, 244, 236, 0.06);
@@ -279,13 +299,16 @@
     background-color: rgba(18, 14, 12, 0.84); border-width: 0; border-radius: 10px;
     padding: 16px 20px 14px 20px;
 }
-.map-mode .layer-title { color: rgb(240, 150, 80); font-size: 12px; letter-spacing: 1px; text-shadow: none; margin-bottom: 8px; }
+.layer-section { margin-top: 10px; }
+.map-mode .layer-title { color: rgb(240, 150, 80); font-size: 12px; letter-spacing: 1px; text-shadow: 0 0 0 rgba(0, 0, 0, 0); margin-bottom: 8px; }
 .map-mode .layer-row {
     margin: 0 0 6px 0; padding: 10px 12px 10px 12px; border-radius: 8px;
     background-color: rgba(250, 244, 236, 0.05);
 }
+.map-mode .layer-row-compact { padding: 6px 12px 6px 12px; margin-bottom: 4px; }
+
 .map-mode .layer-row:hover { background-color: rgba(250, 244, 236, 0.10); }
-.map-mode .layer-toggle Label { font-size: 16px; color: rgb(250, 244, 236); text-shadow: none; }
+.map-mode .layer-toggle Label { font-size: 16px; color: rgb(250, 244, 236); text-shadow: 0 0 0 rgba(0, 0, 0, 0); }
 .map-mode .layer-toggle .unity-toggle__checkmark {
     width: 20px; height: 20px; margin-right: 10px; border-radius: 4px;
     border-color: rgba(250, 244, 236, 0.45); background-color: rgba(250, 244, 236, 0.06);
@@ -293,5 +316,12 @@
 }
 .map-mode .layer-toggle:checked .unity-toggle__checkmark { border-color: rgb(240, 150, 80); }
 .map-mode .layer-desc { display: flex; color: rgba(235, 220, 205, 0.70); font-size: 13px; white-space: normal; margin: 4px 0 0 30px; padding: 0; }
-.map-mode .layer-legend { color: rgba(235, 220, 205, 0.60); font-size: 13px; margin: 4px 0 0 30px; text-shadow: none; }
-.map-mode .layer-foot { color: rgba(235, 220, 205, 0.50); font-size: 13px; text-shadow: none; margin-top: 4px; }
+.map-mode .layer-legend { color: rgba(235, 220, 205, 0.60); font-size: 13px; margin: 4px 0 0 30px; text-shadow: 0 0 0 rgba(0, 0, 0, 0); }
+.map-mode .layer-foot { color: rgba(235, 220, 205, 0.50); font-size: 13px; text-shadow: 0 0 0 rgba(0, 0, 0, 0); margin-top: 4px; }
+
+/* map mode: a layer's description and legend show only while it is on, so the panel stays short */
+.map-mode .layer-row .layer-desc,
+.map-mode .layer-row .layer-legend { display: none; }
+.map-mode .layer-row-on .layer-desc,
+.map-mode .layer-row-on .layer-legend { display: flex; }
+.map-mode .layer-row-compact .layer-desc { display: none; }

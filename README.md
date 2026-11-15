@@ -187,6 +187,8 @@ overlays, data and tools. You are the only one who saves `SampleScene.unity`.
 ---
 
 ## Credits
+Full list of every data source, paper and asset: **[SOURCES.md](SOURCES.md)**.
+
 Terrain and images: NASA/JPL-Caltech/University of Arizona (HiRISE), USGS Astrogeology (Mars 2020 TRN mosaic),
 NASA/JPL-Caltech, ASU (Mastcam-Z) and MSSS (WATSON) for the Perseverance raw images. Raw rover images are
 unprocessed engineering products.

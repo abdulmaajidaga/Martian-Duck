@@ -164,7 +164,15 @@ public class MarsHud : MonoBehaviour
         for (int i = 0; i < layers.Count; i++)
         {
             MarsDataLayer layer = layers[i];
+            if (layer.Group == MarsDataLayer.LayerGroup.MapOverlay && (i == 0 || layers[i - 1].Group != layer.Group))
+            {
+                var section = new Label("MAP OVERLAYS");
+                section.AddToClassList("hud-title"); section.AddToClassList("layer-title"); section.AddToClassList("layer-section");
+                layerList.Add(section);
+            }
             var row = new VisualElement(); row.AddToClassList("layer-row");
+            row.EnableInClassList("layer-row-compact", layer.Group == MarsDataLayer.LayerGroup.MapOverlay);   // overlays: name only
+            row.EnableInClassList("layer-row-on", layer.IsOn);   // descriptions and legends show only for layers that are on
             var toggle = new Toggle($"{(i < 9 ? (i + 1).ToString() : " ")}   {layer.DisplayName}") { value = layer.IsOn };
             toggle.AddToClassList("layer-toggle");
             toggle.RegisterValueChangedCallback(e => layer.SetOn(e.newValue));
@@ -267,6 +275,7 @@ public class MarsHud : MonoBehaviour
         ctx.geo = MarsGeoReference.Current;
         ctx.route = RouteManager.Current;
         ctx.mode = Mode;
+        ctx.helpOpen = helpOpen;
         ctx.deltaTime = dt;
         ctx.sessionTime += dt;
         if (player == null) return;

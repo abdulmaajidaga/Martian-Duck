@@ -77,7 +77,7 @@ public class PlannedPathRenderer : MonoBehaviour
         Camera mapCam = MapClickRoutePlanner.MapCamera();
         bool onMap = mapCam != null;
         ground.enabled = !onMap && ground.positionCount > 1;
-        map.enabled = onMap && map.positionCount > 1;
+        map.enabled = onMap && map.positionCount > 1 && MapOverlayLayer.IsShown(MapOverlayLayer.Content.PlannedRoute);
         if (onMap)
         {
             float metresPerPixel = 2f * mapCam.orthographicSize / Mathf.Max(1, mapCam.pixelHeight);

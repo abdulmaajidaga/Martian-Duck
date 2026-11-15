@@ -4,7 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// Creates PointOfInterest children from a JSON file made by Tools/PoiPhotos/fetch_poi_photos.py
-/// (Assets/MarsData/POI/three_forks_poi.json). Use the context menu "Build Points Of Interest" in the editor;
+/// (Assets/MarsData/POI/three_forks_poi.json) or Tools/PoiPhotos/make_jezero_pois.py (jezero_poi.json). Use the context menu "Build Points Of Interest" in the editor;
 /// the result is saved with the scene, so nothing is loaded at runtime. To add your own point by hand, just add
 /// a PointOfInterest component to any GameObject instead.
 /// Every point gets a marker on the ground (orange pole + label) so it can be found while walking: tall for the
@@ -21,6 +21,10 @@ public class PointOfInterestSet : MonoBehaviour
     [SerializeField] Material markerMaterial;
     [SerializeField, Min(0.2f)] float siteMarkerHeight = 3f;
     [SerializeField, Min(0.2f)] float tubeMarkerHeight = 1.4f;
+    [Tooltip("Landmarks (landing site, named craters and valleys, Ingenuity's first and last airfields).")]
+    [SerializeField, Min(0.2f)] float landmarkMarkerHeight = 5f;
+    [Tooltip("Ingenuity's other airfields.")]
+    [SerializeField, Min(0.2f)] float airfieldMarkerHeight = 1.8f;
     [SerializeField, Min(0.01f)] float labelSize = 0.035f;
 
     [Serializable] class PhotoData { public string file; public string caption; public string camera; public int sol; public string utc; public string credit; }
@@ -76,8 +80,14 @@ public class PointOfInterestSet : MonoBehaviour
             poi.Snap();
             if (addMarkers)
             {
-                bool tube = p.kind == "depot_tube";
-                AddMarker(go.transform, poi.shortName, tube ? tubeMarkerHeight : siteMarkerHeight, tube ? 1f : 2f);
+                (float height, float scale) = p.kind switch
+                {
+                    "depot_tube" => (tubeMarkerHeight, 1f),
+                    "airfield" => (airfieldMarkerHeight, 1.2f),
+                    "landmark" or "ingenuity_landmark" => (landmarkMarkerHeight, 3f),
+                    _ => (siteMarkerHeight, 2f),
+                };
+                AddMarker(go.transform, poi.shortName, height, scale);
                 markers++;
             }
         }
