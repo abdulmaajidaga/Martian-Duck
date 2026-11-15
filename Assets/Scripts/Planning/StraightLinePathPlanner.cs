@@ -59,7 +59,7 @@ public class StraightLinePathPlanner : MarsPathPlanner
     {
         var player = FindAnyObjectByType<MarsPlayerController>();
         var req = new PathPlanRequest { start = player != null ? player.transform.position : MarsGeoReference.Current.Center };
-        foreach (PointOfInterest p in FindObjectsByType<PointOfInterest>(FindObjectsSortMode.None))
+        foreach (PointOfInterest p in FindObjectsByType<PointOfInterest>())
             if (!p.name.StartsWith("Depot tube")) req.stops.Add(PathStop.From(p));
         RequestPlan(req, p => Debug.Log($"[Planner] {(p.success ? "OK" : "FAILED")}: {p.message} · {p.points.Count} points · " +
                                          $"climb {p.climbM:0} m · max slope {p.maxSlopeDeg:0}° · {p.computeMs:0} ms", this));

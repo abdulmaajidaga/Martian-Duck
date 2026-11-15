@@ -59,6 +59,16 @@ ExportedObj/
 /MarsSources/*.tiff
 /MarsSources/*.png
 
+# Large rasters dropped in the project root (e.g. Mars Trek downloads): never commit
+/*.tif
+/*.tiff
+/*.TIF
+/*.img
+/*.IMG
+/*.jp2
+/*.JP2
+/*.tif.aux.xml
+
 # Preview / debug images: keep only the HUD screenshots
 /MarsPreviews/*
 !/MarsPreviews/hud_*.png

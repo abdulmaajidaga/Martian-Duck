@@ -2,9 +2,9 @@
 
 # Martian Duck: walking on Jezero Crater
 
-A first-person astronaut walk on real Mars terrain: the Three Forks area of Jezero Crater, where Perseverance
-collected samples and built its sample depot. The ground is a real NASA HiRISE elevation model at true scale with
-a real HiRISE colour mosaic. You walk under Mars gravity, follow Perseverance's tracks, visit the real sample sites
+A first-person astronaut walk on real Mars terrain: the western half of Jezero Crater (45 × 59 km), including the
+delta and the Three Forks area where Perseverance collected samples and built its sample depot. The ground is the
+Mars 2020 team's CTX elevation model at true scale with a colourised CTX photo mosaic. You walk under Mars gravity, follow Perseverance's tracks, visit the real sample sites
 and depot tubes (with real rover photos), and use a helmet HUD with a top-down map.
 
 **Next up:** the player chooses the places to visit, and a path planner finds a walkable route over the terrain.
@@ -35,7 +35,8 @@ and depot tubes (with real rover photos), and use a helmet HUD with a top-down m
 | Space | Jump (Mars gravity, 3.71 m/s²) |
 | M | Map mode (top-down, movement paused, mouse free) |
 | L | Data layers panel (1–9 toggle layers) |
-| P | Next photo at a point of interest |
+| E | Photo viewer at a point of interest (mouse free: click ◀ ▶ / ✕) |
+| ← → | Previous / next photo |
 | H | Help overlay |
 | Esc | Release the mouse (click to recapture) |
 
@@ -74,13 +75,13 @@ sensible).
    }
    ```
 3. Read the terrain through **`MarsTerrainQuery`** (`Core/MarsTerrainQuery.cs`):
-   * `GetHeightGrid(step)`: full height grid in metres, `[row south→north, col west→east]`. It is 2049 × 2049, so use `step` 2–4 or a coarse-to-fine search.
-   * `CellSize` (0.61 m × 0.75 m per sample), `WorldToGrid`, `GridToWorld`, `HeightAt`, `SlopeAt` (degrees), `NormalAt`, `GradeBetween`, `InBounds`.
+   * `GetHeightGrid(step)`: full height grid in metres, `[row south→north, col west→east]`. It is 4097 × 4097 (11 m × 14.5 m cells over 45 × 59 km), so use `step` 2–4 or a coarse-to-fine search.
+   * `CellSize` (11.0 m × 14.5 m per sample), `WorldToGrid`, `GridToWorld`, `HeightAt`, `SlopeAt` (degrees), `NormalAt`, `GradeBetween`, `InBounds`.
    * Respect `request.maxSlopeDeg` (30°, the astronaut's real limit; steeper ground makes the player slide).
 4. On the **Path Planner** prefab, add your component and remove/disable `StraightLinePathPlanner` (the placeholder).
 5. Test: in the placeholder, right-click the component → **Test: start at player, visit all points of interest**
    (copy that method into yours). The last plan is drawn as gizmos: green = walkable, red = too steep, yellow = stops.
-   The placeholder currently gives 1297 m / ~14 min for the 5 sample sites.
+   The placeholder currently gives about 1.8 km / ~18 min for the 5 sample sites.
 6. Useful extra data: `Assets/MarsData/Heightmaps/jezero_info.json` (real size, elevation range, georeference) and
    Perseverance's real drive path in `MarsSources/Rover Drive Path.geojson` (a route the rover proved drivable).
 
@@ -144,10 +145,18 @@ overlays, data and tools. You are the only one who saves `SampleScene.unity`.
 ```
 
 **World facts the code relies on**
-* Area: 1254 m (west→east) × 1544 m (south→north), elevation −2555 m to −2450 m (Mars areoid), true scale.
-* Unity axes: **+X = east, +Z = north, +Y = up**, 1 unit = 1 metre. North is up on the map.
+* Map: **77.0–77.8° E, 17.7–18.7° N** (Mars 2020 frame): the western half of Jezero crater with its west and
+  south rim, the river valley, the delta and the surrounding plains.
+* Size: 45.05 km (west→east) × 59.27 km (south→north), true scale. Elevation −3095 m to −1378 m (Mars areoid):
+  about 1.7 km of relief. Walking straight across takes hours, so plan routes accordingly.
+* Unity axes: **+X = east, +Z = north, +Y = up**, 1 unit = 1 metre. North is up on the map. The terrain's
+  south-west corner is at the world origin.
 * `MarsGeoReference` (in the scene) converts world ↔ longitude/latitude and gives true elevation.
-* Height grid: 2049 × 2049 samples (0.61 m × 0.75 m). Source: HiRISE DTM DTEEC_045994_1985_046060_1985 (1 m/px).
+* Height grid: 4097 × 4097 samples (11.0 m × 14.5 m apart), from the Mars 2020 CTX DEM (20 m/px). Ground detail
+  smaller than about 20 m is **not** in the data, and slopes are gentler than the real metre-scale ground.
+* Ground texture: 8192 × 8192 (5.5 m × 7.2 m per pixel) from the CTX photo mosaic (5 m/px), colourised.
+* Rebuild the map from the raw files with `Tools/RegionBuilder/build_region.py` (see the top of that file);
+  the previous 1.25 km HiRISE map of Three Forks is still in `Assets/MarsData` as `jezero_*`.
 
 ---
 

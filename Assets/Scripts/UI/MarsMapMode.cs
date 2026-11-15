@@ -37,7 +37,7 @@ public class MarsMapMode : HudModule
         // Top bar: title
         var top = new VisualElement { pickingMode = PickingMode.Ignore };
         top.AddToClassList("hud-panel"); top.AddToClassList("map-title");
-        AddLabel(top, "MAP  ·  THREE FORKS AREA, JEZERO CRATER", "hud-title");
+        AddLabel(top, "MAP  ·  JEZERO CRATER", "hud-title");
         AddLabel(top, "Movement paused  ·  M to return", "hud-small");
         root.Add(top);
 
@@ -147,7 +147,7 @@ public class MarsMapMode : HudModule
         // Scale bar: pick a round length that is 90-220 px on screen
         float pxPerMetre = (ToPanel(ctx.geo.Center + Vector3.right * 100f) - ToPanel(ctx.geo.Center)).magnitude / 100f;
         float metres = 10f;
-        foreach (float m in new[] { 10f, 20f, 50f, 100f, 200f, 250f, 500f, 1000f, 2000f })
+        foreach (float m in new[] { 10f, 20f, 50f, 100f, 200f, 250f, 500f, 1000f, 2000f, 5000f, 10000f, 20000f })
         { metres = m; if (m * pxPerMetre >= 90f) break; }
         scaleBar.style.width = metres * pxPerMetre;
         scaleLabel.text = metres >= 1000f ? $"{metres / 1000f:0.#} km" : $"{metres:0} m";

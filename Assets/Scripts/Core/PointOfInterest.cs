@@ -9,7 +9,7 @@ public class PoiPhoto
     public Texture2D image;
     [Tooltip("What the photo shows.")]
     public string caption;
-    [Tooltip("Where it came from, e.g. \"Sol 490 · Front Hazcam · NASA/JPL-Caltech\".")]
+    [Tooltip("Where it came from, e.g. \"Front Hazcam · Sol 490 · NASA/JPL-Caltech\".")]
     public string credit;
 }
 
@@ -25,7 +25,13 @@ public class PointOfInterest : MonoBehaviour
     public string displayName = "Point of interest";
     [Tooltip("Label used on the map (falls back to Display Name when empty).")]
     public string shortName;
-    [Tooltip("Short line under the name, e.g. \"Rock core · Sedimentary\".")]
+    [Tooltip("Kind of place, shown above the name, e.g. \"Sample site\".")]
+    public string category;
+    [Tooltip("When it happened, e.g. \"Sols 490 & 495 · Jul 7 & 12, 2022\".")]
+    public string when;
+    [Tooltip("What the rover did here, in a sentence or two.")]
+    [TextArea(2, 6)] public string activity;
+    [Tooltip("Extra line (sample type, rock type, ...). Optional.")]
     public string subtitle;
     [TextArea(2, 6)] public string details;
     public List<PoiPhoto> photos = new List<PoiPhoto>();

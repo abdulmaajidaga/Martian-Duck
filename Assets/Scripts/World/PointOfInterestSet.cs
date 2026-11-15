@@ -26,7 +26,8 @@ public class PointOfInterestSet : MonoBehaviour
     [Serializable] class PhotoData { public string file; public string caption; public string camera; public int sol; public string utc; public string credit; }
     [Serializable] class PointData
     {
-        public string kind; public string name; public string short_name; public string subtitle; public string details;
+        public string kind; public string category; public string name; public string short_name; public string subtitle; public string details;
+        public string activity; public string when;
         public double lon; public double lat; public float reveal_radius_m; public PhotoData[] photos;
     }
     [Serializable] class FileData { public PointData[] points; }
@@ -51,6 +52,9 @@ public class PointOfInterestSet : MonoBehaviour
             var poi = go.AddComponent<PointOfInterest>();
             poi.displayName = p.name;
             poi.shortName = string.IsNullOrEmpty(p.short_name) ? p.name : p.short_name;
+            poi.category = p.category;
+            poi.when = p.when;
+            poi.activity = p.activity;
             poi.subtitle = p.subtitle;
             poi.details = p.details;
             poi.longitude = p.lon; poi.latitude = p.lat;
@@ -60,7 +64,13 @@ public class PointOfInterestSet : MonoBehaviour
             {
                 var tex = UnityEditor.AssetDatabase.LoadAssetAtPath<Texture2D>($"{folder}/{ph.file}");
                 if (tex == null) Debug.LogWarning($"[POI] Photo not found: {folder}/{ph.file}", this);
-                poi.photos.Add(new PoiPhoto { image = tex, caption = ph.caption, credit = $"Sol {ph.sol}  ·  {ph.camera}  ·  {ph.credit}" });
+                // "Front Hazcam: the robotic arm at the outcrop" -> caption "The robotic arm at the outcrop"
+                string caption = ph.caption ?? "";
+                int colon = caption.IndexOf(": ", StringComparison.Ordinal);
+                if (colon >= 0) caption = caption.Substring(colon + 2);
+                if (caption.Length > 0) caption = char.ToUpperInvariant(caption[0]) + caption.Substring(1);
+                string camera = (ph.camera ?? "").Replace(" (left)", "");
+                poi.photos.Add(new PoiPhoto { image = tex, caption = caption, credit = $"{camera}  ·  Sol {ph.sol}  ·  {ph.credit}" });
                 photoCount++;
             }
             poi.Snap();

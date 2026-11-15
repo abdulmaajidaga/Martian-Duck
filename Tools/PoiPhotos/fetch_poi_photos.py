@@ -26,6 +26,7 @@ Needs: Python 3, curl on PATH, Pillow. Existing photos are not downloaded again.
 """
 import json
 import os
+import re
 import subprocess
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
@@ -126,6 +127,46 @@ def fetch_photo(image_id, fname, caption):
     }
 
 
+NUMBER_WORDS = {1: "one", 2: "two", 3: "three"}
+MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+
+def tidy_date(text):
+    """'Jul. 7&12, 2022' -> 'Jul 7 & 12, 2022'."""
+    return re.sub(r"\s*&\s*", " & ", text.replace(".", "")).strip()
+
+
+def sols_text(text):
+    return ("Sols " if "&" in text else "Sol ") + re.sub(r"\s*&\s*", " & ", text)
+
+
+def earth_date_of_sol(sol):
+    """Earth date (UTC) of any raw image taken on that sol, e.g. 'Dec 21, 2022'."""
+    if sol not in _sol_cache:
+        _sol_cache[sol] = {i["imageid"]: i for i in curl_json(API.format(sol=sol))["images"]}
+    any_image = next(iter(_sol_cache[sol].values()))
+    y, m, d = any_image["date_taken_utc"][:10].split("-")
+    return f"{MONTHS[int(m) - 1]} {int(d)}, {y}"
+
+
+def sample_activity(s):
+    names = [n.strip() for n in s["sample_name"].split("+")]
+    count = NUMBER_WORDS.get(len(names), str(len(names)))
+    listed = names[0] if len(names) == 1 else ", ".join(names[:-1]) + " and " + names[-1]
+    kind = s["sample_type"].lower()
+    if kind == "rock core":
+        what = f"Drilled {count} rock core{'s' if len(names) > 1 else ''}, {listed}, from the {s['outcrop_name']} outcrop"
+    elif kind == "regolith":
+        what = f"Scooped {count} regolith sample{'s' if len(names) > 1 else ''} (loose soil and pebbles), {listed}, near {s['outcrop_name']}"
+    elif kind == "atmospheric":
+        what = f"Sealed a sample of the Martian atmosphere, {listed}"
+    else:
+        what = f"Collected {listed} ({s['sample_type']})"
+    rock = s["rock_type"]
+    tail = "" if rock in ("", "n/a") else f" The material is {rock[0].lower() + rock[1:]}{'' if rock.lower().endswith('grains') else ' rock'}."
+    return f"{what} and sealed {'them in sample tubes' if len(names) > 1 else 'it in a sample tube'}.{tail}"
+
+
 def main():
     os.makedirs(PHOTO_DIR, exist_ok=True)
     samples = {f["properties"]["sample_name"]: f["properties"]
@@ -136,7 +177,9 @@ def main():
         rock = "" if s["rock_type"] in ("", "n/a") else f"  ·  {s['rock_type']}"
         many = "s" if "&" in s["sample_num"] else ""
         points.append({
-            "kind": "sample_site", "name": name, "short_name": name,
+            "kind": "sample_site", "category": "Sample site", "name": name, "short_name": name,
+            "activity": sample_activity(s),
+            "when": f"{sols_text(s['sol'])}  ·  {tidy_date(s['date'])}",
             "subtitle": f"{s['sample_type']}{rock}",
             "details": f"Sample{many} {s['sample_num']}  ·  {s['outcrop_name']} outcrop, {s['sample_location']}\n"
                        f"Sol {s['sol']}  ·  {s['date']}  ·  sample length {float(s['sample_ht_cm']):.1f} cm",
@@ -147,7 +190,10 @@ def main():
         ph = [fetch_photo(watson, f"depot_tube_{n:02d}_1.jpg", "WATSON: the tube on the ground under the rover, just after the drop"),
               fetch_photo(hazcam, f"depot_tube_{n:02d}_2.jpg", hazcam_caption or "Front Hazcam: the tube on the ground after the rover backed away")]
         points.append({
-            "kind": "depot_tube", "name": f"Depot tube {n}", "short_name": f"Tube {n}",
+            "kind": "depot_tube", "category": "Depot tube", "name": f"Depot tube {n}", "short_name": f"Tube {n}",
+            "activity": (f"Perseverance set sample tube {n} of 10 down here while building the Three Forks depot, "
+                         "a backup set of samples for a future Mars Sample Return mission."),
+            "when": f"Sol {sol}  ·  {earth_date_of_sol(sol)}",
             "subtitle": "Sample tube left at the Three Forks depot",
             "details": f"Dropped on sol {sol} ({n} of 10)  ·  photographed sol {ph[0]['sol']} ({ph[0]['utc'][:10]})\n"
                        f"Position: where the rover parked to drop it (about 1-2 m)",

@@ -62,16 +62,74 @@
 .waypoint-arrow { width: 30px; height: 34px; margin-right: 10px; }
 .waypoint-text { flex-grow: 1; }
 
-/* ---------- point of interest ---------- */
-.poi-panel { width: 504px; border-color: rgba(255, 170, 100, 0.75); background-color: rgba(3, 16, 24, 0.55); }
-.poi-panel .hud-small { font-size: 12px; }
-.poi-title { color: rgb(255, 190, 120); flex-grow: 1; font-size: 12px; }
-.poi-distance { margin-top: 0; font-size: 13px; }
-.poi-subtitle { margin-top: 1px; font-size: 14px; }
-.poi-details { white-space: normal; margin-bottom: 6px; font-size: 13px; color: rgb(205, 245, 255); }
-.poi-photo { border-width: 1px; border-color: rgba(255, 190, 120, 0.6); margin-bottom: 4px; }
-.poi-caption { white-space: normal; color: rgb(238, 252, 255); font-size: 14px; }
-.poi-footer { color: rgb(255, 205, 150); margin-top: 4px; font-size: 13px; }
+/* ---------- point of interest: card + photo viewer ----------
+   Warm, quiet palette (dark umber glass, one orange accent), photo first, readable sentence-case text. */
+.poi-card {
+    background-color: rgba(18, 14, 12, 0.96);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+.poi-card-photo { background-color: rgb(30, 24, 20); }
+.poi-fill { position: absolute; left: 0; top: 0; right: 0; bottom: 0; }
+.poi-card-body { padding: 14px 18px 14px 18px; }
+.poi-row { flex-direction: row; align-items: center; }
+
+.poi-eyebrow { color: rgb(240, 150, 80); font-size: 12px; -unity-font-style: bold; letter-spacing: 1px; flex-grow: 1; margin: 0; padding: 0; }
+.poi-distance { color: rgba(235, 220, 205, 0.55); font-size: 12px; margin: 0; padding: 0; }
+.poi-title { color: rgb(250, 244, 236); font-size: 24px; -unity-font-style: bold; margin: 4px 0 2px 0; padding: 0; white-space: normal; }
+.poi-when { color: rgba(235, 220, 205, 0.70); font-size: 14px; margin: 0 0 10px 0; padding: 0; }
+.poi-activity { color: rgba(250, 244, 236, 0.92); font-size: 15px; white-space: normal; margin: 0 0 10px 0; padding: 0; }
+.poi-caption { color: rgba(235, 220, 205, 0.60); font-size: 13px; -unity-font-style: italic; white-space: normal; margin: 0 0 12px 0; padding: 0; }
+.poi-credit { color: rgba(235, 220, 205, 0.45); font-size: 12px; margin: 2px 0 0 0; padding: 0; }
+
+.poi-hint-row { margin-top: 2px; }
+.poi-key {
+    color: rgb(250, 244, 236); font-size: 12px; -unity-font-style: bold;
+    border-width: 1px; border-color: rgba(250, 244, 236, 0.35); border-radius: 4px;
+    padding: 1px 6px 1px 6px; margin: 0 6px 0 0;
+}
+.poi-key-gap { margin-left: 14px; }
+.poi-hint { color: rgba(235, 220, 205, 0.65); font-size: 13px; margin: 0; padding: 0; }
+
+/* round arrow buttons */
+.poi-arrow {
+    position: absolute; width: 36px; height: 36px; top: 50%; margin: -18px 0 0 0; padding: 0;
+    border-width: 0; border-radius: 18px; background-color: rgba(10, 8, 7, 0.55);
+    align-items: center; justify-content: center;
+}
+.poi-arrow:hover { background-color: rgba(240, 150, 80, 0.85); }
+.poi-arrow:active { background-color: rgb(240, 150, 80); }
+.poi-arrow-left { left: 10px; }
+.poi-arrow-right { right: 10px; }
+.poi-icon { width: 16px; height: 16px; color: rgb(250, 244, 236); }
+
+/* photo position dots */
+.poi-dots { position: absolute; bottom: 10px; left: 0; right: 0; flex-direction: row; justify-content: center; }
+.poi-dots-static { position: relative; bottom: 0; justify-content: flex-start; margin: 10px 0 8px 0; }
+.poi-dot { width: 7px; height: 7px; border-radius: 4px; margin: 0 3px 0 3px; background-color: rgba(250, 244, 236, 0.40); }
+.poi-dot-on { background-color: rgb(250, 244, 236); }
+
+/* full-screen viewer */
+.poi-viewer {
+    position: absolute; left: 0; top: 0; right: 0; bottom: 0;
+    background-color: rgba(10, 8, 7, 0.95);
+    align-items: center; justify-content: center;
+}
+.poi-viewer-stage { flex-direction: row; align-items: center; width: 82%; height: 66%; }
+.poi-viewer-frame { flex-grow: 1; height: 100%; margin: 0 20px 0 20px; }
+.poi-arrow-big { position: relative; top: 0; margin: 0; width: 56px; height: 56px; border-radius: 28px; flex-shrink: 0; }
+.poi-arrow-big .poi-icon { width: 24px; height: 24px; }
+.poi-viewer-info { width: 62%; margin-top: 22px; }
+.poi-viewer-title { color: rgb(250, 244, 236); font-size: 28px; -unity-font-style: bold; flex-grow: 1; margin: 0; padding: 0; }
+.poi-viewer-counter { color: rgba(235, 220, 205, 0.60); font-size: 16px; margin: 0; padding: 0; }
+.poi-viewer-caption { color: rgba(250, 244, 236, 0.92); font-size: 17px; white-space: normal; margin: 0; padding: 0; }
+.poi-close {
+    position: absolute; top: 28px; right: 32px; width: 44px; height: 44px; padding: 0; border-width: 0;
+    border-radius: 22px; background-color: rgba(250, 244, 236, 0.10); align-items: center; justify-content: center;
+}
+.poi-close:hover { background-color: rgba(240, 150, 80, 0.85); }
+.poi-close .poi-icon { width: 18px; height: 18px; }
 
 /* ---------- layer panel ---------- */
 .layer-panel { position: absolute; left: 18px; top: 34%; min-width: 250px; }

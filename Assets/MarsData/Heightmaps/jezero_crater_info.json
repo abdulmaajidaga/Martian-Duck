@@ -1,0 +1,26 @@
+{
+ "name": "jezero_crater",
+ "area": "Jezero crater (west half) and surroundings",
+ "heightmap": "Assets/MarsData/Heightmaps/jezero_crater_height.png",
+ "color": "Assets/MarsData/Textures/jezero_crater_color.jpg",
+ "resolution": 4097,
+ "width_m": 45047.445,
+ "length_m": 59274.698,
+ "sample_spacing_m": [
+  10.998,
+  14.471
+ ],
+ "min_elevation_m": -3094.86,
+ "max_elevation_m": -1378.107,
+ "height_range_m": 1716.753,
+ "bounds": {
+  "west": 77.0,
+  "east": 77.8,
+  "south": 17.7,
+  "north": 18.7
+ },
+ "elevation_datum": "metres, Mars areoid (MOLA), as in the Mars 2020 CTX DEM",
+ "source_dtm": "Mars 2020 Science Investigation CTX DEM Mosaic, 20 m (M20_JezeroCrater_CTXDEM_20m.tif)",
+ "source_color": "Mars 2020 CTX ortho mosaic, 5 m (greyscale), colourised from the Three Forks HiRISE colour",
+ "frame_note": "Equirectangular, sphere R=3396190 m, true scale at latitude 18.2. Heightmap samples lie on the box edges."
+}

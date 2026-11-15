@@ -9,7 +9,22 @@ regenerate data with the tools in `Tools/`.
 - `Rover Drive Path.geojson`, `Rover Waypoints.geojson`, `Sample Depot Zone.geojson`, `Sampling Locations.geojson`
   (Mars 2020 route data used for the overlays and the rover tracks)
 
-## Download (not committed)
+## Current map: Jezero crater, 77.0–77.8°E, 17.7–18.7°N (not committed)
+Needed only to rebuild it with `Tools/RegionBuilder/build_region.py`:
+
+| File | Size | What it is |
+|---|---|---|
+| `M20_JezeroCrater_CTXDEM_20m.tif` | 90 MB | Mars 2020 CTX elevation model, 20 m/px, covers 77.00–78.58°E, 17.58–19.29°N |
+| `M20_JezeroCrater_CTXortho_mosaic_5m.tif` | 360 MB | Matching CTX photo mosaic (greyscale), 5 m/px |
+
+```bash
+cd MarsSources
+B=https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/mars2020_trn/CTX/ScienceInvestigationMaps_JPL
+curl -L -C - -O $B/M20_JezeroCrater_CTXDEM_20m.tif
+curl -L -C - -O $B/M20_JezeroCrater_CTXortho_mosaic_5m.tif
+```
+
+## Previous map (Three Forks HiRISE, 1.25 km) sources (not committed)
 Put each file directly in this folder with the same name.
 
 | File | Size | What it is |
