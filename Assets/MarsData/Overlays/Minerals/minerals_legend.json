@@ -1,0 +1,26 @@
+{
+ "aqueous_minerals": {
+  "service": "Aquieous_Mineral_Distribution_Options_clon0",
+  "detections_in_map": {
+   "silica": {
+    "colour": "153 0 204 255",
+    "count": 1
+   },
+   "phyllosilicate": {
+    "colour": "0 153 255 255",
+    "count": 2
+   }
+  },
+  "detections_drawn_incl_edge": 6
+ },
+ "hydrous_minerals": {
+  "service": "Hydrous_Mineral_Detections_OMEGA_CRISM_clon0",
+  "detections_in_map": {
+   "Hydrous Mineral Detection": {
+    "colour": "255 0 0 255",
+    "count": 2
+   }
+  },
+  "detections_drawn_incl_edge": 3
+ }
+}

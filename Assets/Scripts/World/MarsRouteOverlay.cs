@@ -36,6 +36,8 @@ public class MarsRouteOverlay : MonoBehaviour
     [SerializeField, Min(0.1f)] float maxPointSpacing = 0.5f;
     [SerializeField, Min(0.5f)] float markerHeight = 4f;
     [SerializeField] bool showLabels = true;
+    [Tooltip("Also build red marker poles at the sampling sites. Off by default: every site has an in-game point-of-interest marker.")]
+    [SerializeField] bool buildSiteMarkers = false;
     [SerializeField, Min(0.01f)] float labelSize = 0.12f;
 
     // Visibility: switch the whole overlay, or its "Drive Path" / "Depot Zone" / "Sampling Sites" children, on or
@@ -103,9 +105,12 @@ public class MarsRouteOverlay : MonoBehaviour
             AddLine(go, depotMaterial, depotLineWidth, Drape(data.depot_zone, true), true);
         }
 
-        Transform sites = NewGroup(GroupNames[2]);
-        foreach (Sample s in data.samples ?? Array.Empty<Sample>())
-            AddMarker(sites, s, Ground(s.x, s.y) - Vector3.up * heightOffset);
+        if (buildSiteMarkers)
+        {
+            Transform sites = NewGroup(GroupNames[2]);
+            foreach (Sample s in data.samples ?? Array.Empty<Sample>())
+                AddMarker(sites, s, Ground(s.x, s.y) - Vector3.up * heightOffset);
+        }
 
         Debug.Log($"{LogPrefix}Built {lines} drive lines ({points} points), depot zone and {data.samples?.Length ?? 0} sampling sites.", this);
     }

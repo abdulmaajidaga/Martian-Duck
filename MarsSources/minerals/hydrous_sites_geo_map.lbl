@@ -1,0 +1,90 @@
+PDS_VERSION_ID               = PDS3       
+
+/* FILE DATA ELEMENTS */
+
+RECORD_TYPE                  = STREAM                                         
+FILE_RECORDS                 = 1855
+                                                                              
+/* POINTERS TO DATA OBJECTS */
+
+^SPREADSHEET                 = "HYDROUS_SITES_GEO_MAP.CSV"
+
+/* DESCRIPTIVE DATA ELEMENTS */
+
+DATA_SET_ID                  = "MEX-M-OMEGA-5-DDR-GLOBAL-MAPS-V1.0"
+PRODUCT_ID                   = HYDROUS_SITES_GEO_MAP
+RELEASE_ID                   = 0001
+REVISION_ID                  = 0001
+PROCESSING_LEVEL_ID          = 5
+PRODUCT_CREATION_TIME        = 2014-02-24T15:22:20.000
+INSTRUMENT_HOST_ID           = MEX
+INSTRUMENT_HOST_NAME         = "MARS EXPRESS"
+INSTRUMENT_ID                = OMEGA
+INSTRUMENT_NAME              = "Observatoire Mineralogie, Eau, Glaces, Activite"
+MISSION_NAME                 = "MARS EXPRESS"
+TARGET_NAME                  = MARS
+START_TIME                   = 2004-01-15T16:20:24.031
+STOP_TIME                    = 2009-04-01T13:58:39.020
+START_ORBIT_NUMBER           = 22
+STOP_ORBIT_NUMBER            = 6734
+DESCRIPTION                  = "This data product is a global map of hydrated
+  mineral sites at the surface of Mars detected using the reflectance data
+  acquired by the Mars Express OMEGA hyperspectral camera from January 2004 to
+  September 2010, and from the Mars Reconnaissance Orbiter (MRO) CRISM imaging
+  spectrometer. This data product corresponds to the map that was produced and
+  published by Carter et al. ([CARTER_JGR2013], figure 1). This map is in the
+  form of a spreadsheet where each row represents a detected hydrated mineral
+  site, given by its planetocentric coordinates. The identifier of the OMEGA
+  Experiment Data Records (EDR) used for each detection is also given. For more
+  information on the methodology to identify these sites and how this map can be
+  best interpreted, please refer to the original publication available in the
+  DOCUMENT directory of this data set."
+                                                                              
+/* IMAGE OBJECT DEFINITIONS */
+
+OBJECT                       = SPREADSHEET                                    
+  INTERCHANGE_FORMAT         = ASCII                                          
+  ROWS                       = 1855
+  FIELDS                     = 4                                             
+  ROW_BYTES                  = 47            
+  FIELD_DELIMITER            = "COMMA"                                        
+                                                                              
+  OBJECT                     = FIELD                                          
+    NAME                     = "LONGITUDE"                                   
+    FIELD_NUMBER             = 1                                              
+    DATA_TYPE                = ASCII_REAL                                           
+    BYTES                    = 7                                             
+    DESCRIPTION              = "Planetocentric longitude of detected hydrous
+                                mineral."                                  
+  END_OBJECT                 = FIELD                                          
+                                                                              
+  OBJECT                     = FIELD                                          
+    NAME                     = "LATITUDE"                                    
+    FIELD_NUMBER             = 2                                              
+    DATA_TYPE                = ASCII_REAL                                           
+    BYTES                    = 6                                             
+    DESCRIPTION              = "Planetocentric latitude of detected hydrous
+                                mineral."                                  
+  END_OBJECT                 = FIELD
+  
+  OBJECT                     = FIELD                                          
+    NAME                     = "OMEGA_EDR_PRODUCT_ID"                                    
+    FIELD_NUMBER             = 3                                              
+    DATA_TYPE                = CHARACTER                                           
+    BYTES                    = 14                                             
+    DESCRIPTION              = "List of OMEGA EDR data product IDs used for this
+                                detection."                                  
+  END_OBJECT                 = FIELD  
+
+  OBJECT                     = FIELD                                          
+    NAME                     = "CRISM_EDR_PRODUCT_ID"                                    
+    FIELD_NUMBER             = 4                                              
+    DATA_TYPE                = CHARACTER                                           
+    BYTES                    = 11                                             
+    DESCRIPTION              = "List of CRISM EDR data product IDs used for this
+                                detection."                                  
+  END_OBJECT                 = FIELD
+  
+END_OBJECT                   = SPREADSHEET                                    
+                                                                              
+END                                                                           

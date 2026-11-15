@@ -20,7 +20,7 @@ from scipy.ndimage import gaussian_filter
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 OUT = os.path.join(ROOT, "Assets", "MarsData", "Overlays", "Tracks")
-INFO = os.path.join(ROOT, "Assets", "MarsData", "Heightmaps", "jezero_info.json")
+INFO = os.path.join(ROOT, "Assets", "MarsData", "Heightmaps", "jezero_crater_info.json")   # the current map
 DRIVES = os.path.join(ROOT, "MarsSources", "Rover Drive Path.geojson")
 
 WHEEL_D, GROUSERS = 0.525, 48
@@ -202,6 +202,7 @@ def turn_arcs(p, h_in, h_out, step=0.2):
 
 TURN_TILE_M = 2 * (math.hypot(GAUGE / 2, WHEELBASE / 2) + DECAL_W / 2) + 0.2   # square covering all six wheel arcs (~4.0 m)
 TURN_TILE_PX = 256
+TURN_BIN_DEG = 5.0                                    # turns share atlas tiles by angle, rounded to this
 
 def make_turn_atlas(turns):
     """Draw each turn-in-place (all six wheels rolling around the rover centre) into one tile of an atlas.
@@ -252,7 +253,10 @@ def make_turn_atlas(turns):
 def main():
     make_textures()
     info = json.load(open(INFO))
-    (LON0, LON1), (LAT0, LAT1) = info["lon_range_east"], info["lat_range_north"]
+    if "bounds" in info:
+        b = info["bounds"]; (LON0, LON1), (LAT0, LAT1) = (b["west"], b["east"]), (b["south"], b["north"])
+    else:
+        (LON0, LON1), (LAT0, LAT1) = info["lon_range_east"], info["lat_range_north"]
     W, L = info["width_m"], info["length_m"]
     to_m = lambda lon, lat: np.array([(lon - LON0) / (LON1 - LON0) * W, (lat - LAT0) / (LAT1 - LAT0) * L])
     inside = lambda q: -5 <= q[0] <= W + 5 and -5 <= q[1] <= L + 5
@@ -296,16 +300,22 @@ def main():
             kept.append(g)
         return kept
     turns_kept = [t for t in arcs_out if 2 <= t[0][0] <= W - 2 and 2 <= t[0][1] <= L - 2]
-    cols, rows = make_turn_atlas([(t[1], t[2]) for t in turns_kept])
+    # A turn's arcs depend only on its turn angle, so turns share atlas tiles by angle rounded to TURN_BIN_DEG.
+    # (One tile per turn would need a 4096 x 16384 atlas for the full traverse.)
+    bins = sorted({int(round(wrap(t[2] - t[1]) / TURN_BIN_DEG)) for t in turns_kept})
+    tile_of = {b: i for i, b in enumerate(bins)}
+    cols, rows = make_turn_atlas([(0.0, b * TURN_BIN_DEG) for b in bins])
     turn_list = [dict(sol=t[3], x=round(float(t[0][0] / W), 6), y=round(float(t[0][1] / L), 6), heading=round(float(t[1]), 3),
-                      turn_deg=round(float(wrap(t[2] - t[1])), 2), tile=i) for i, t in enumerate(turns_kept)]
+                      turn_deg=round(float(wrap(t[2] - t[1])), 2), tile=tile_of[int(round(wrap(t[2] - t[1]) / TURN_BIN_DEG))])
+                 for t in turns_kept]
     data = dict(note="Each rut segment = 7 numbers: centre x (0..1 west->east), centre y (0..1 south->north), heading (deg clockwise from north), "
                      "length (m), width (m), uvBias (texture offset along the rut), fade (1 = full, lower at rut ends). Each turn = one decal "
                      "using a tile of the turn atlas, drawn in the rover frame at its starting heading.",
                 segment_stride=7,
                 tile_length_m=TILE_LEN, wheel_width_m=WHEEL_W, gauge_m=GAUGE, wheelbase_m=WHEELBASE, grouser_pitch_m=GROUSER_PITCH,
                 turn_tile_size_m=TURN_TILE_M, turn_atlas_cols=cols, turn_atlas_rows=rows,
-                ruts=norm(ruts), turns=turn_list)
+                ruts=norm(ruts), turns=turn_list,
+                bounds=dict(west=LON0, east=LON1, south=LAT0, north=LAT1))
     stats["segments"] = sum(len(g["segments"]) // 6 for g in data["ruts"]); stats["turn_decals"] = len(turn_list)
     json.dump(data, open(os.path.join(OUT, "rover_tracks.json"), "w"), separators=(",", ":"))
     print(json.dumps(stats), f"| grouser pitch {GROUSER_PITCH * 100:.2f} cm, texture tile {TILE_LEN:.3f} m")
