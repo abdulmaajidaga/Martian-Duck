@@ -4,7 +4,9 @@
 
 **Plan a Marswalk on a 2D map, then see it in 3D on the ground around you: Jezero Crater, real Mars data, true scale.**
 
-![Spawning in Jezero Crater, entering the map and turning to the rocket](docs/gifs/one.gif)
+<p align="center">▶ <b><a href="https://youtu.be/0KDy8VOv_4s">Watch the demo video on YouTube</a></b></p>
+
+<p align="center"><img src="docs/gifs/one.gif" alt="Spawning in Jezero Crater, entering the map and turning to the rocket" width="800"></p>
 
 | | |
 |---|---|
@@ -48,7 +50,7 @@ the terrain, and both show the same world. Whatever you plan or switch on in 2D 
 crater rim. Bottom: four sites picked on the 2D map, reordered and routed (8.2 km, about 57 min, steepest slope 13°,
 computed in 1.4 s); the route then lies on the ground in front of you.*
 
-![Following the planned path on the ground](docs/gifs/three.gif)
+<p align="center"><img src="docs/gifs/three.gif" alt="Following the planned path on the ground" width="800"></p>
 
 ## How it works
 
@@ -69,8 +71,6 @@ function. Ground steeper than 30° is excluded and ground near that limit is pen
 several stops, the planner chooses the best visiting order. It reports distance, climb, maximum slope and time, and
 re-plans when the explorer strays. A helmet HUD guides the walk with navigation, a compass, waypoints and data layers.
 
-![The map and the route planner: picking stops, reordering and routing](docs/gifs/05_map_planner.gif)
-
 **Real places, real photos.** Walk up to any of 86 points of interest (sampling sites, depot tubes, landmarks,
 Ingenuity's airfields) to see what Perseverance did there and its own images of the spot.
 
@@ -85,10 +85,7 @@ Two missions give the walk a science purpose. The first retrieves the depot's sa
 **"Follow the water"**, drills four real Perseverance sites in order, from igneous rock, through water-formed carbonate,
 to the potential biosignature rock Cheyava Falls.
 
-<p>
-  <img src="docs/gifs/two.gif" alt="Mission 1: walking to the Three Forks depot and collecting the sample tubes" width="49%">
-  <img src="docs/gifs/04_mission2_drill.gif" alt="Mission 2: drilling samples at the Follow the water sites" width="49%">
-</p>
+<p align="center"><img src="docs/gifs/two.gif" alt="Mission 1: walking to the Three Forks depot and collecting the sample tubes" width="800"></p>
 
 ## Benefits and impact
 
