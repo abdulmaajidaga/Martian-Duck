@@ -16,12 +16,20 @@ public class MarsPlayerController : MonoBehaviour
     public const float MarsGravity = 3.71f;
 
     [Header("Movement")]
-    [SerializeField, Min(0f)] float walkSpeed = 2.5f;
-    [SerializeField, Min(0f)] float sprintSpeed = 5f;
+    [Tooltip("Walking speed (m/s). Faster than a real suited astronaut (~1.5 m/s) so the 45 km map is playable.")]
+    [SerializeField, Min(0f)] float walkSpeed = 4f;
+    [Tooltip("Speed while holding Shift (m/s).")]
+    [SerializeField, Min(0f)] float sprintSpeed = 12f;
     [Tooltip("How quickly speed changes on the ground (m/s²).")]
-    [SerializeField, Min(0f)] float groundAcceleration = 20f;
-    [Tooltip("How quickly speed changes in the air (m/s²). Low values keep momentum through Mars' long, floaty jumps.")]
-    [SerializeField, Min(0f)] float airAcceleration = 2f;
+    [SerializeField, Min(0f)] float groundAcceleration = 30f;
+    [Tooltip("How quickly speed changes in the air (m/s²). Some control is kept so short hops over bumps don't feel like lost input.")]
+    [SerializeField, Min(0f)] float airAcceleration = 8f;
+
+    [Header("Ground following")]
+    [Tooltip("After walking off a bump or down a slope, stick back to the ground if it is within this distance (m) instead of floating off in the low gravity.")]
+    [SerializeField, Min(0f)] float groundSnapDistance = 0.8f;
+    [Tooltip("Seconds after leaving the ground during which the player still counts as grounded (full control, can jump).")]
+    [SerializeField, Min(0f)] float coyoteTime = 0.15f;
 
     [Header("Jumping & Gravity")]
     [Tooltip("Downward acceleration in m/s². Mars: 3.71, Earth: 9.81.")]
@@ -31,7 +39,7 @@ public class MarsPlayerController : MonoBehaviour
 
     [Header("Slopes")]
     [Tooltip("Steepest slope, in degrees, the player can walk up. Applied to the CharacterController.")]
-    [SerializeField, Range(0f, 90f)] float slopeLimit = 30f;
+    [SerializeField, Range(0f, 90f)] float slopeLimit = 40f;
     [Tooltip("Slide down surfaces steeper than the slope limit instead of standing on them.")]
     [SerializeField] bool slideOnSteepSlopes = true;
     [SerializeField, Min(0f)] float slideSpeed = 3f;
@@ -51,6 +59,8 @@ public class MarsPlayerController : MonoBehaviour
     Vector3 horizontalVelocity;
     float verticalVelocity;
     float pitch;
+    float lastGroundedTime = -1f;
+    bool jumpedThisAir;
 
     bool onSteepSlope;
     Vector3 groundNormal = Vector3.up;
@@ -121,8 +131,11 @@ public class MarsPlayerController : MonoBehaviour
     void Move()
     {
         float dt = Time.deltaTime;
-        bool grounded = controller.isGrounded;
-        bool standingOnSteepSlope = grounded && onSteepSlope;
+        bool touching = controller.isGrounded;
+        if (touching) { lastGroundedTime = Time.time; jumpedThisAir = false; }
+        // "Grounded" for control purposes includes a short grace period after leaving the ground (coyote time).
+        bool grounded = touching || (!jumpedThisAir && Time.time - lastGroundedTime <= coyoteTime);
+        bool standingOnSteepSlope = touching && onSteepSlope;
 
         // Horizontal movement, with full control on the ground and limited control in the air.
         Vector2 input = Vector2.ClampMagnitude(ReadMoveInput(), 1f);
@@ -132,7 +145,7 @@ public class MarsPlayerController : MonoBehaviour
         horizontalVelocity = Vector3.MoveTowards(horizontalVelocity, targetVelocity, acceleration * dt);
 
         // Vertical movement.
-        if (grounded && verticalVelocity < 0f)
+        if (touching && verticalVelocity < 0f)
         {
             // Push down enough to follow the ground when walking downhill instead of hopping off it.
             float slopeDrop = horizontalVelocity.magnitude * Mathf.Tan(slopeLimit * Mathf.Deg2Rad);
@@ -140,7 +153,10 @@ public class MarsPlayerController : MonoBehaviour
         }
 
         if (grounded && !standingOnSteepSlope && JumpPressed())
+        {
             verticalVelocity = Mathf.Sqrt(2f * gravity * jumpHeight);
+            jumpedThisAir = true;
+        }
 
         verticalVelocity -= gravity * dt;
 
@@ -153,12 +169,31 @@ public class MarsPlayerController : MonoBehaviour
 
         CollisionFlags flags = controller.Move((horizontalVelocity + slide + Vector3.up * verticalVelocity) * dt);
 
+        // Walked off a bump or over a crest: pull back down onto the ground if it is close, so the low gravity
+        // doesn't turn every bump into a floaty hop with reduced control.
+        if (touching && !controller.isGrounded && !jumpedThisAir && verticalVelocity <= 0f && groundSnapDistance > 0f)
+            SnapToGround();
+
         onSteepSlope = steepHitThisMove;
         groundNormal = groundNormalThisMove;
 
         // Stop rising when hitting a ceiling.
         if ((flags & CollisionFlags.Above) != 0 && verticalVelocity > 0f)
             verticalVelocity = 0f;
+    }
+
+    void SnapToGround()
+    {
+        float radius = controller.radius * 0.9f;
+        Vector3 bottom = transform.TransformPoint(controller.center) + Vector3.down * (controller.height * 0.5f - controller.radius);
+        if (Physics.SphereCast(bottom + Vector3.up * 0.05f, radius, Vector3.down, out RaycastHit hit,
+                               groundSnapDistance + controller.skinWidth + 0.05f, ~0, QueryTriggerInteraction.Ignore)
+            && Vector3.Angle(Vector3.up, hit.normal) <= slopeLimit + 5f)
+        {
+            float drop = Mathf.Max(0f, hit.distance - 0.05f - controller.skinWidth * 0.5f);
+            if (drop > 0.001f) controller.Move(Vector3.down * drop);
+            verticalVelocity = -1f;
+        }
     }
 
     void OnControllerColliderHit(ControllerColliderHit hit)
