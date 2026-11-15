@@ -19,11 +19,7 @@ public static class MarsInput
     public static bool MapToggle => Pressed(Key.M);
     public static bool LayersToggle => Pressed(Key.L);
     public static bool HelpToggle => Pressed(Key.H);
-    /// <summary>Open / close the photo viewer at a point of interest.</summary>
-    public static bool PoiViewerToggle => Pressed(Key.E);
-    public static bool PhotoNext => Pressed(Key.RightArrow) || Pressed(Key.P);
-    public static bool PhotoPrev => Pressed(Key.LeftArrow);
-    public static bool Close => Pressed(Key.Escape);
+    public static bool NextPhoto => Pressed(Key.P);
 
     /// <summary>1..9 if a number key (top row or keypad) was pressed this frame, otherwise 0.</summary>
     public static int NumberPressed
@@ -40,10 +36,7 @@ public static class MarsInput
     public static bool MapToggle => Input.GetKeyDown(KeyCode.M);
     public static bool LayersToggle => Input.GetKeyDown(KeyCode.L);
     public static bool HelpToggle => Input.GetKeyDown(KeyCode.H);
-    public static bool PoiViewerToggle => Input.GetKeyDown(KeyCode.E);
-    public static bool PhotoNext => Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.P);
-    public static bool PhotoPrev => Input.GetKeyDown(KeyCode.LeftArrow);
-    public static bool Close => Input.GetKeyDown(KeyCode.Escape);
+    public static bool NextPhoto => Input.GetKeyDown(KeyCode.P);
 
     public static int NumberPressed
     {
