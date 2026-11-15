@@ -22,6 +22,13 @@ public class MarsHud : MonoBehaviour
     [SerializeField] float showHelpAtStartSeconds = 6f;
 
     public HudModes Mode { get; private set; } = HudModes.Hud;
+
+    /// <summary>Full-screen layer on top of all panels, for pop-ups such as the photo viewer.</summary>
+    public VisualElement OverlayLayer { get; private set; }
+
+    /// <summary>True while a pop-up has paused walking (the mouse is free for clicking).</summary>
+    public bool MovementPaused => pauseOwners.Count > 0;
+    readonly HashSet<object> pauseOwners = new HashSet<object>();
     public static MarsHud Current { get; private set; }
 
     MarsPlayerController playerController;
@@ -90,6 +97,10 @@ public class MarsHud : MonoBehaviour
         layerList = new VisualElement(); layerPanel.Add(layerList);
         layerFoot = new Label("1-9 toggle   ·   L close"); layerFoot.AddToClassList("hud-small"); layerFoot.AddToClassList("layer-foot"); layerPanel.Add(layerFoot);
         root.Add(layerPanel);
+
+        OverlayLayer = new VisualElement { name = "overlay-layer", pickingMode = PickingMode.Ignore };
+        OverlayLayer.AddToClassList("hud-fullscreen");
+        root.Add(OverlayLayer);
 
         help = BuildHelp();
         root.Add(help);
@@ -169,14 +180,29 @@ public class MarsHud : MonoBehaviour
     {
         if (mode == Mode) return;
         Mode = mode;
-        // Movement is paused in map mode (disabling the controller also releases the mouse cursor).
-        if (playerController != null) playerController.enabled = mode == HudModes.Hud;
         ctx.mode = mode;
+        UpdateMovement();
         foreach (HudModule m in HudModule.Registered) if (m != null && m.Root != null) m.OnModeChanged(mode, ctx);
         ApplyVisibility();
     }
 
     public void ToggleMap() => SetMode(Mode == HudModes.Map ? HudModes.Hud : HudModes.Map);
+
+    /// <summary>
+    /// Pause or resume walking on behalf of a pop-up (e.g. the photo viewer). While paused the mouse is free for
+    /// clicking UI. Several owners can pause at once; walking resumes when all have released.
+    /// </summary>
+    public void SetMovementPaused(object owner, bool paused)
+    {
+        if (paused) pauseOwners.Add(owner); else pauseOwners.Remove(owner);
+        UpdateMovement();
+    }
+
+    // Walking is on only in HUD mode with no pop-up open (disabling the controller also frees the mouse cursor).
+    void UpdateMovement()
+    {
+        if (playerController != null) playerController.enabled = Mode == HudModes.Hud && pauseOwners.Count == 0;
+    }
     void SetHelp(bool open) { helpOpen = open; helpAutoHideAt = -1f; ApplyVisibility(); }
 
     void ApplyVisibility()

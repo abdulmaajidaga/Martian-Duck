@@ -19,7 +19,11 @@ public static class MarsInput
     public static bool MapToggle => Pressed(Key.M);
     public static bool LayersToggle => Pressed(Key.L);
     public static bool HelpToggle => Pressed(Key.H);
-    public static bool NextPhoto => Pressed(Key.P);
+    /// <summary>Open / close the photo viewer at a point of interest.</summary>
+    public static bool PoiViewerToggle => Pressed(Key.E);
+    public static bool PhotoNext => Pressed(Key.RightArrow) || Pressed(Key.P);
+    public static bool PhotoPrev => Pressed(Key.LeftArrow);
+    public static bool Close => Pressed(Key.Escape);
 
     // ---- map navigation ----
     /// <summary>Scroll this frame in wheel notches (positive = away from the user / zoom in). Trackpads give fractions.</summary>
@@ -67,7 +71,10 @@ public static class MarsInput
     public static bool MapToggle => Input.GetKeyDown(KeyCode.M);
     public static bool LayersToggle => Input.GetKeyDown(KeyCode.L);
     public static bool HelpToggle => Input.GetKeyDown(KeyCode.H);
-    public static bool NextPhoto => Input.GetKeyDown(KeyCode.P);
+    public static bool PoiViewerToggle => Input.GetKeyDown(KeyCode.E);
+    public static bool PhotoNext => Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.P);
+    public static bool PhotoPrev => Input.GetKeyDown(KeyCode.LeftArrow);
+    public static bool Close => Input.GetKeyDown(KeyCode.Escape);
 
     public static float MapScroll => Mathf.Clamp(Input.mouseScrollDelta.y, -1f, 1f);
     public static float MapZoomKeys =>
