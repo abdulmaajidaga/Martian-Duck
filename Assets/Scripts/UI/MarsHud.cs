@@ -33,6 +33,7 @@ public class MarsHud : MonoBehaviour
 
     MarsPlayerController playerController;
     VisualElement root, layerPanel, layerList, help, hint;
+    Label layerFoot;
     readonly Dictionary<HudRegion, VisualElement> regions = new Dictionary<HudRegion, VisualElement>();
     readonly Dictionary<MarsDataLayer, Toggle> layerToggles = new Dictionary<MarsDataLayer, Toggle>();
     readonly HudContext ctx = new HudContext();
@@ -92,9 +93,9 @@ public class MarsHud : MonoBehaviour
         layerPanel = new VisualElement { name = "layer-panel" };
         layerPanel.AddToClassList("hud-panel");
         layerPanel.AddToClassList("layer-panel");
-        var title = new Label("DATA LAYERS"); title.AddToClassList("hud-title"); layerPanel.Add(title);
+        var title = new Label("DATA LAYERS"); title.AddToClassList("hud-title"); title.AddToClassList("layer-title"); layerPanel.Add(title);
         layerList = new VisualElement(); layerPanel.Add(layerList);
-        var foot = new Label("1-9 toggle   ·   L close"); foot.AddToClassList("hud-small"); layerPanel.Add(foot);
+        layerFoot = new Label("1-9 toggle   ·   L close"); layerFoot.AddToClassList("hud-small"); layerFoot.AddToClassList("layer-foot"); layerPanel.Add(layerFoot);
         root.Add(layerPanel);
 
         OverlayLayer = new VisualElement { name = "overlay-layer", pickingMode = PickingMode.Ignore };
@@ -120,7 +121,7 @@ public class MarsHud : MonoBehaviour
         (string key, string what)[] rows =
         {
             ("W A S D", "Walk"), ("Mouse", "Look around"), ("Shift", "Sprint"), ("Space", "Jump"),
-            ("M", "Map mode (movement paused)"), ("L", "Data layer panel"), ("1 - 9", "Toggle layers (panel open)"),
+            ("M", "Map mode (movement paused)"), ("Scroll  + -", "Zoom map  ·  drag to pan  ·  R reset"), ("L", "Data layer panel"), ("1 - 9", "Toggle layers (panel open)"),
             ("E", "Photo viewer at a point of interest"), ("← →", "Previous / next photo"),
             ("H", "Show / hide this help"), ("Esc", "Release mouse  ·  click to recapture"),
         };
@@ -160,6 +161,7 @@ public class MarsHud : MonoBehaviour
             toggle.AddToClassList("layer-toggle");
             toggle.RegisterValueChangedCallback(e => layer.SetOn(e.newValue));
             row.Add(toggle);
+            if (!string.IsNullOrEmpty(layer.Description)) { var d = new Label(layer.Description); d.AddToClassList("layer-desc"); row.Add(d); }
             string legend = layer.Legend;
             if (!string.IsNullOrEmpty(legend)) { var lg = new Label(legend); lg.AddToClassList("hud-small"); lg.AddToClassList("layer-legend"); row.Add(lg); }
             layerList.Add(row);
@@ -209,7 +211,10 @@ public class MarsHud : MonoBehaviour
         foreach (HudModule m in HudModule.Registered)
             if (m != null && m.Root != null)
                 m.Root.style.display = (m.VisibleIn & Mode) != 0 ? DisplayStyle.Flex : DisplayStyle.None;
-        bool layersShown = Mode == HudModes.Map || layersOpenInHud;
+        bool map = Mode == HudModes.Map;
+        root.EnableInClassList("map-mode", map);     // map mode restyles the shared layer panel (see MarsHud.uss)
+        layerFoot.text = map ? "Click a layer or press 1-9" : "1-9 toggle   ·   L close";
+        bool layersShown = map || layersOpenInHud;
         layerPanel.style.display = layersShown ? DisplayStyle.Flex : DisplayStyle.None;
         help.style.display = helpOpen ? DisplayStyle.Flex : DisplayStyle.None;
         hint.style.display = helpOpen ? DisplayStyle.None : DisplayStyle.Flex;

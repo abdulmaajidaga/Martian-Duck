@@ -25,6 +25,37 @@ public static class MarsInput
     public static bool PhotoPrev => Pressed(Key.LeftArrow);
     public static bool Close => Pressed(Key.Escape);
 
+    // ---- map navigation ----
+    /// <summary>Scroll this frame in wheel notches (positive = away from the user / zoom in). Trackpads give fractions.</summary>
+    public static float MapScroll
+    {
+        get
+        {
+            Mouse m = Mouse.current;
+            if (m == null) return 0f;
+            float y = m.scroll.ReadValue().y;
+            return Mathf.Clamp(y, -1f, 1f);   // some platforms report 120 per notch, others 1
+        }
+    }
+    /// <summary>+1 while a zoom-in key is held, -1 while a zoom-out key is held.</summary>
+    public static float MapZoomKeys
+    {
+        get
+        {
+            Keyboard kb = Keyboard.current;
+            if (kb == null) return 0f;
+            float z = 0f;
+            if (kb[Key.Equals].isPressed || kb[Key.NumpadPlus].isPressed) z += 1f;
+            if (kb[Key.Minus].isPressed || kb[Key.NumpadMinus].isPressed) z -= 1f;
+            return z;
+        }
+    }
+    public static bool MapResetView => Pressed(Key.R);
+    /// <summary>Mouse position in screen pixels (origin bottom-left).</summary>
+    public static Vector2 PointerPosition => Mouse.current != null ? Mouse.current.position.ReadValue() : Vector2.zero;
+    public static bool DragPressed => Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame;
+    public static bool DragHeld => Mouse.current != null && Mouse.current.leftButton.isPressed;
+
     /// <summary>1..9 if a number key (top row or keypad) was pressed this frame, otherwise 0.</summary>
     public static int NumberPressed
     {
@@ -44,6 +75,15 @@ public static class MarsInput
     public static bool PhotoNext => Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.P);
     public static bool PhotoPrev => Input.GetKeyDown(KeyCode.LeftArrow);
     public static bool Close => Input.GetKeyDown(KeyCode.Escape);
+
+    public static float MapScroll => Mathf.Clamp(Input.mouseScrollDelta.y, -1f, 1f);
+    public static float MapZoomKeys =>
+        ((Input.GetKey(KeyCode.Equals) || Input.GetKey(KeyCode.KeypadPlus)) ? 1f : 0f) -
+        ((Input.GetKey(KeyCode.Minus) || Input.GetKey(KeyCode.KeypadMinus)) ? 1f : 0f);
+    public static bool MapResetView => Input.GetKeyDown(KeyCode.R);
+    public static Vector2 PointerPosition => Input.mousePosition;
+    public static bool DragPressed => Input.GetMouseButtonDown(0);
+    public static bool DragHeld => Input.GetMouseButton(0);
 
     public static int NumberPressed
     {
