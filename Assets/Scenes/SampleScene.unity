@@ -182154,7 +182154,7 @@ GameObject:
   - component: {fileID: 1712040065}
   m_Layer: 0
   m_Name: Mars Overlays
-  m_TagString: EditorOnly
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -182214,6 +182214,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapLineScaler
   mapWidthPixels: 3
+  mapLift: 60
+  mapOnlyLayer: 31
 --- !u!1 &1715515559
 GameObject:
   m_ObjectHideFlags: 0
